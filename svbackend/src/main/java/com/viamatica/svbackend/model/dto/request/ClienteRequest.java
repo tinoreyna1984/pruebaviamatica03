@@ -1,19 +1,11 @@
-package com.viamatica.svbackend.model.entity;
+package com.viamatica.svbackend.model.dto.request;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "clientes")
-public class Client {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cliente_id")
-    private Long id;
+public class ClienteRequest {
     private String name;
     private String lastName;
     private String docId;

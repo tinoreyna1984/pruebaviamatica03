@@ -4,16 +4,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "cajas")
-public class Cash {
-
+@Table(name = "pagos")
+public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "caja_id")
+    @Column(name = "pago_id")
     private Long id;
-    private String descripcion;
-    private boolean active = true;
+    @Column(name = "fecha_pago")
+    private Date fechaPago;
 }

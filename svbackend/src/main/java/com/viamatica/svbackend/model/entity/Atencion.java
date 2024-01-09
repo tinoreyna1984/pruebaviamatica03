@@ -11,16 +11,18 @@ import org.hibernate.annotations.ColumnDefault;
 @Setter
 @Entity
 @Table(name = "atenciones")
-public class Attention {
+public class Atencion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "atencion_id")
     private Long id;
-    private String descripcion;
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_atencion")
     private AttentionType attentionType;
+    private String descripcion;
     @ColumnDefault("'NUEVO'")
     @Enumerated(EnumType.STRING)
+    @Column(name = "estado_atencion")
     private AttentionStatus attentionStatus;
 
     public String getDescripcion() {

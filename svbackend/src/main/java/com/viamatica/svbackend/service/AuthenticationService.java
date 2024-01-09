@@ -6,17 +6,14 @@ import com.viamatica.svbackend.model.entity.User;
 import com.viamatica.svbackend.repository.UserRepository;
 import com.viamatica.svbackend.util.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -85,6 +82,7 @@ public class AuthenticationService {
         extraClaims.put("username", user.getUsername());
         extraClaims.put("role", user.getRole().name());
         extraClaims.put("permissions", user.getAuthorities());
+        extraClaims.put("routes", user.getRole().getRoutes());
 
         return extraClaims;
     }

@@ -1,12 +1,15 @@
-package com.tinexlab.genmodel.util;
+package com.viamatica.svbackend.util;
 
 import lombok.Getter;
 
 @Getter
 public enum Route {
     HOME("Inicio",""),
+    CUSTOMERS("Clientes","customers"),
     USERS("Usuarios","users"),
-    ABOUT("Acerca de","about");
+    ATTENTIONS("Atenciones", "attentions"),
+    CONTRACTS("Contratos", "contracts")
+    ;
 
     private String name;
     private String path;
