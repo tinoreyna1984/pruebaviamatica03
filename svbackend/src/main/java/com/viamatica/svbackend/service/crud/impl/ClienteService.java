@@ -1,4 +1,4 @@
-package com.viamatica.svbackend.service;
+package com.viamatica.svbackend.service.crud.impl;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -7,6 +7,7 @@ import com.viamatica.svbackend.model.dto.request.ClienteRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.Cliente;
 import com.viamatica.svbackend.repository.ClienteRepository;
+import com.viamatica.svbackend.service.crud.GenericService;
 import com.viamatica.svbackend.util.helpers.HelperClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -23,12 +24,13 @@ import java.io.Reader;
 import java.util.List;
 
 @Service
-public class ClienteService {
+public class ClienteService implements GenericService<Cliente, ClienteRequest> {
 
     @Autowired
     private ClienteRepository clienteRepository;
     private final HelperClass helperClass = new HelperClass();
 
+    @Override
     public GenericResponse<?> get(Integer page, Integer size){
         try{
             if (page != null && size != null) {
@@ -49,11 +51,12 @@ public class ClienteService {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
     }
 
+    @Override
     public GenericResponse<Cliente> getById(Long id){
         Cliente cliente = null;
         try {
@@ -66,19 +69,20 @@ public class ClienteService {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
         return GenericResponse.getResponse(200, "Cliente encontrado", cliente);
     }
 
+    @Override
     public GenericResponse<?> save(ClienteRequest clienteRequest, BindingResult result){
         Cliente clienteNuevo = new Cliente();
 
         // proceso de validación
         String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
-            return GenericResponse.getResponse(400, "Error al crear usuario", errors);
+            return GenericResponse.getResponse(400, "Error al crear cliente", errors);
 
         clienteNuevo.setName(clienteRequest.getName());
         clienteNuevo.setLastName(clienteRequest.getLastName());
@@ -105,14 +109,22 @@ public class ClienteService {
         return GenericResponse.getResponse(201, "Cliente creado", clienteNuevo);
     }
 
+    @Override
     public GenericResponse<?> update(ClienteRequest clienteRequest, Long id, BindingResult result){
         // proceso de validación
         String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
-            return GenericResponse.getResponse(400, "Error al actualizar usuario", errors);
+            return GenericResponse.getResponse(400, "Error al actualizar cliente", errors);
 
         Cliente clienteActual = clienteRepository.findById(id).get();
         Cliente clienteEditado = null;
+
+        if(clienteActual == null)
+            return GenericResponse
+                    .getResponse(400,
+                            "No se encuentra el cliente con ID " + id,
+                            null);
+
         try {
             clienteActual.setName(clienteRequest.getName());
             clienteActual.setLastName(clienteRequest.getLastName());
@@ -136,6 +148,7 @@ public class ClienteService {
         return GenericResponse.getResponse(200, "Cliente actualizado", clienteEditado);
     }
 
+    @Override
     public GenericResponse<?> delete(Long id){
         try {
             clienteRepository.deleteById(id);
@@ -177,12 +190,12 @@ public class ClienteService {
         } catch (CsvException e) {
             return GenericResponse
                     .getResponse(400,
-                            "Error al cargar desde CSV, revisar archivo ",
+                            "Error al cargar clientes desde CSV, revisar archivo ",
                             null);
         } catch (DataAccessException e){
             return GenericResponse
                     .getResponse(500,
-                            "Error al cargar desde CSV: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            "Error al cargar clientes desde CSV: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
         } catch (Exception e){
             return GenericResponse

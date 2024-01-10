@@ -1,4 +1,4 @@
-package com.viamatica.svbackend.service;
+package com.viamatica.svbackend.service.crud.impl;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -7,6 +7,7 @@ import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.User;
 import com.viamatica.svbackend.repository.UserRepository;
+import com.viamatica.svbackend.service.crud.GenericService;
 import com.viamatica.svbackend.util.enums.Role;
 import com.viamatica.svbackend.util.enums.UserStatus;
 import com.viamatica.svbackend.util.helpers.HelperClass;
@@ -54,7 +55,7 @@ public class UserService implements GenericService<User, UserRequest> {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
     }
@@ -72,19 +73,19 @@ public class UserService implements GenericService<User, UserRequest> {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
         return GenericResponse.getResponse(200, "Usuario encontrado", usuario);
     }
 
     @Override
-    public GenericResponse<?> save(UserRequest userRequest, BindingResult result){
+    public GenericResponse<?> save(UserRequest request, BindingResult result){
         User usuarioNuevo = new User();
 
         // si no viaja el ROL, por defecto debe ser el de USUARIO
-        if(userRequest.getRole() == null)
-            userRequest.setRole(Role.USER);
+        if(request.getRole() == null)
+            request.setRole(Role.USER);
 
         // proceso de validación
         String errors = helperClass.validaRequest(result);
@@ -92,13 +93,13 @@ public class UserService implements GenericService<User, UserRequest> {
             return GenericResponse.getResponse(400, "Error al crear usuario", errors);
 
         // encripta clave
-        helperClass.encriptarClaveUserRequest(userRequest);
+        helperClass.encriptarClaveUserRequest(request);
 
-        usuarioNuevo.setEmail(userRequest.getEmail());
-        usuarioNuevo.setUsername(userRequest.getUsername());
-        usuarioNuevo.setPassword(userRequest.getPassword());
-        usuarioNuevo.setRole(userRequest.getRole());
-        usuarioNuevo.setUserCreator(userRequest.getUserCreator());
+        usuarioNuevo.setEmail(request.getEmail());
+        usuarioNuevo.setUsername(request.getUsername());
+        usuarioNuevo.setPassword(request.getPassword());
+        usuarioNuevo.setRole(request.getRole());
+        usuarioNuevo.setUserCreator(request.getUserCreator());
         usuarioNuevo.setUserStatus(UserStatus.NOT_APPROVED);
 
         try {
@@ -111,7 +112,7 @@ public class UserService implements GenericService<User, UserRequest> {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
 
@@ -119,7 +120,7 @@ public class UserService implements GenericService<User, UserRequest> {
     }
 
     @Override
-    public GenericResponse<?> update(UserRequest userRequest, Long id, BindingResult result){
+    public GenericResponse<?> update(UserRequest request, Long id, BindingResult result){
         // proceso de validación
         String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
@@ -127,19 +128,24 @@ public class UserService implements GenericService<User, UserRequest> {
 
         User usuarioActual = userRepository.findById(id).get();
         User usuarioEditado = null;
+        if(usuarioActual == null)
+            return GenericResponse
+                    .getResponse(400,
+                            "No se encuentra el usuario con ID " + id,
+                            null);
         try {
-            usuarioActual.setEmail(userRequest.getEmail());
-            usuarioActual.setUsername(userRequest.getUsername());
-            usuarioActual.setPassword(userRequest.getPassword());
+            usuarioActual.setEmail(request.getEmail());
+            usuarioActual.setUsername(request.getUsername());
+            usuarioActual.setPassword(request.getPassword());
             // si no viaja el ROL, por defecto debe ser el de USUARIO
-            if(userRequest.getRole() == null)
+            if(request.getRole() == null)
                 usuarioActual.setRole(Role.USER);
             else
-                usuarioActual.setRole(userRequest.getRole());
+                usuarioActual.setRole(request.getRole());
             // encripta clave
             helperClass.encriptarClaveUsuario(usuarioActual);
-            usuarioActual.setUserCreator(userRequest.getUserCreator());
-            usuarioActual.setUserStatus(userRequest.getUserStatus());
+            usuarioActual.setUserCreator(request.getUserCreator());
+            usuarioActual.setUserStatus(request.getUserStatus());
             usuarioEditado = userRepository.save(usuarioActual);
         } catch(DataAccessException e) {
             return GenericResponse
@@ -149,7 +155,7 @@ public class UserService implements GenericService<User, UserRequest> {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
         return GenericResponse.getResponse(200, "Usuario actualizado", usuarioEditado);
@@ -167,7 +173,7 @@ public class UserService implements GenericService<User, UserRequest> {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
 
@@ -195,7 +201,7 @@ public class UserService implements GenericService<User, UserRequest> {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
     }
@@ -217,21 +223,21 @@ public class UserService implements GenericService<User, UserRequest> {
                 user.setRole(userRequest.getRole());
                 userRepository.save(user);
             }
-            return GenericResponse.getResponse(201, "Se creó registro desde CSV", archivo.getName());
+            return GenericResponse.getResponse(201, "Se creó usuarios desde CSV", archivo.getName());
         } catch (CsvException e) {
             return GenericResponse
                     .getResponse(400,
-                            "Error al cargar desde CSV, revisar archivo ",
+                            "Error al cargar usuarios desde CSV, revisar archivo ",
                             null);
         } catch (DataAccessException e){
             return GenericResponse
                     .getResponse(500,
-                            "Error al cargar desde CSV: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            "Error al cargar usuarios desde CSV: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
     }

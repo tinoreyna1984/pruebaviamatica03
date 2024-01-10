@@ -3,7 +3,7 @@ package com.viamatica.svbackend.controller;
 import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.User;
-import com.viamatica.svbackend.service.UserService;
+import com.viamatica.svbackend.service.crud.impl.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,21 +51,21 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @PostMapping("/users")
-    public ResponseEntity<GenericResponse<?>> guardarUsuario(@Valid @RequestBody UserRequest userRequest, BindingResult result){
+    public ResponseEntity<GenericResponse<?>> guardarUsuario(@Valid @RequestBody UserRequest request, BindingResult result){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(userService.save(userRequest, result)
+                .body(userService.save(request, result)
                 );
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @PutMapping("/users/{id}")
-    public ResponseEntity<GenericResponse<?>> editarUsuario(@Valid @RequestBody UserRequest userRequest, @PathVariable Long id, BindingResult result){
+    public ResponseEntity<GenericResponse<?>> editarUsuario(@Valid @RequestBody UserRequest request, @PathVariable Long id, BindingResult result){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(userService.update(userRequest, id, result)
+                .body(userService.update(request, id, result)
                 );
     }
 

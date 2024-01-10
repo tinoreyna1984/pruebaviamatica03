@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -66,7 +65,7 @@ public class AuthenticationService {
         } catch (Exception e){
             return GenericResponse
                     .getResponse(500,
-                            "Error desconocido: " + e.getMessage(),
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
 

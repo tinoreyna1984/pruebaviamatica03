@@ -1,4 +1,4 @@
-package com.viamatica.svbackend.service;
+package com.viamatica.svbackend.service.crud;
 
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import org.springframework.validation.BindingResult;

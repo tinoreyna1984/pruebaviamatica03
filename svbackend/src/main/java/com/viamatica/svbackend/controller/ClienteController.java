@@ -3,7 +3,7 @@ package com.viamatica.svbackend.controller;
 import com.viamatica.svbackend.model.dto.request.ClienteRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.Cliente;
-import com.viamatica.svbackend.service.ClienteService;
+import com.viamatica.svbackend.service.crud.impl.ClienteService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,21 +51,21 @@ public class ClienteController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
     @PostMapping("/clientes")
-    public ResponseEntity<GenericResponse<?>> guardarCliente(@Valid @RequestBody ClienteRequest clienteRequest, BindingResult result){
+    public ResponseEntity<GenericResponse<?>> guardarCliente(@Valid @RequestBody ClienteRequest request, BindingResult result){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(clienteService.save(clienteRequest, result)
+                .body(clienteService.save(request, result)
                 );
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
     @PutMapping("/clientes/{id}")
-    public ResponseEntity<GenericResponse<?>> editarCliente(@Valid @RequestBody ClienteRequest clienteRequest, @PathVariable Long id, BindingResult result){
+    public ResponseEntity<GenericResponse<?>> editarCliente(@Valid @RequestBody ClienteRequest request, @PathVariable Long id, BindingResult result){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(clienteService.update(clienteRequest, id, result)
+                .body(clienteService.update(request, id, result)
                 );
     }
 
