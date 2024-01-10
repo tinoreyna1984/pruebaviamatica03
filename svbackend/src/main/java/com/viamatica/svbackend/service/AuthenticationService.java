@@ -4,7 +4,7 @@ import com.viamatica.svbackend.model.dto.request.AuthenticationRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.User;
 import com.viamatica.svbackend.repository.UserRepository;
-import com.viamatica.svbackend.util.UserStatus;
+import com.viamatica.svbackend.util.enums.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;

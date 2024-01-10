@@ -1,7 +1,9 @@
 package com.viamatica.svbackend.model.entity;
 
-import com.viamatica.svbackend.util.ContractStatus;
-import com.viamatica.svbackend.util.PaymentMethod;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.viamatica.svbackend.util.enums.ContractStatus;
+import com.viamatica.svbackend.util.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +21,10 @@ public class Contrato {
     @Column(name = "contrato_id")
     private Long id;
     @Column(name = "fecha_inicio_contrato")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date fechaInicioContrato;
     @Column(name = "fecha_fin_contrato")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date fechaFinContrato;
     @Column(name = "estado_contrato")
     @ColumnDefault("'VIG'")
@@ -30,4 +34,16 @@ public class Contrato {
     @ColumnDefault("'EFECTIVO'")
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+
+    // cada contrato es para un servicio
+    @ManyToOne
+    @JoinColumn(name="servicio_id", referencedColumnName = "servicio_id")
+    @JsonBackReference
+    private Servicio servicio;
+
+    // cada contrato es de un cliente
+    @ManyToOne
+    @JoinColumn(name="cliente_id", referencedColumnName = "cliente_id")
+    @JsonBackReference
+    private Cliente cliente;
 }

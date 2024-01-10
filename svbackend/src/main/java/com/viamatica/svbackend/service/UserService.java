@@ -7,9 +7,10 @@ import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.User;
 import com.viamatica.svbackend.repository.UserRepository;
-import com.viamatica.svbackend.util.Role;
+import com.viamatica.svbackend.util.enums.Role;
+import com.viamatica.svbackend.util.enums.UserStatus;
+import com.viamatica.svbackend.util.helpers.HelperClass;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,33 +32,19 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    // codificador de password
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    private void encriptarClaveUserRequest(UserRequest userRequest) {
-        String claveEncriptada = passwordEncoder.encode(userRequest.getPassword());
-        userRequest.setPassword(claveEncriptada);
-    }
-
-    private void encriptarClaveUsuario(User user) {
-        String claveEncriptada = passwordEncoder.encode(user.getPassword());
-        user.setPassword(claveEncriptada);
-    }
+    private final HelperClass helperClass = new HelperClass();
 
     public GenericResponse<?> getUsers(Integer page, Integer size){
-        Map<String, Object> response = new HashMap<>();
         try{
             if (page != null && size != null) {
                 // Si se proporcionan los parámetros de paginación, devuelve una lista paginada
                 Pageable pageable = PageRequest.of(page, size);
                 Page<User> pageResult = userRepository.findAll(pageable);
-                return GenericResponse.getResponse(200, "Se encuentran los registros", pageResult);
+                return GenericResponse.getResponse(200, "Se encuentran los usuarios", pageResult);
             } else {
                 // Si no se proporcionan los parámetros de paginación, devuelve una lista completa
                 List<User> users = userRepository.findAll();
-                return GenericResponse.getResponse(200, "Se encuentran los registros", users);
+                return GenericResponse.getResponse(200, "Se encuentran los usuarios", users);
             }
         } catch (DataAccessException e){
             return GenericResponse
@@ -77,7 +64,7 @@ public class UserService {
                             "Error al buscar usuario: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
         }
-        return GenericResponse.getResponse(200, "Registro encontrado", usuario);
+        return GenericResponse.getResponse(200, "Usuario encontrado", usuario);
     }
 
     public GenericResponse<?> saveUser(UserRequest userRequest, BindingResult result){
@@ -88,17 +75,19 @@ public class UserService {
             userRequest.setRole(Role.USER);
 
         // proceso de validación
-        String errors = validaRequest(result);
+        String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al crear usuario", errors);
 
         // encripta clave
-        encriptarClaveUserRequest(userRequest);
+        helperClass.encriptarClaveUserRequest(userRequest);
 
         usuarioNuevo.setEmail(userRequest.getEmail());
         usuarioNuevo.setUsername(userRequest.getUsername());
         usuarioNuevo.setPassword(userRequest.getPassword());
         usuarioNuevo.setRole(userRequest.getRole());
+        usuarioNuevo.setUserCreator(userRequest.getUserCreator());
+        usuarioNuevo.setUserStatus(UserStatus.NOT_APPROVED);
 
         try {
             usuarioNuevo = userRepository.save(usuarioNuevo);
@@ -109,12 +98,12 @@ public class UserService {
                             null);
         }
 
-        return GenericResponse.getResponse(201, "Registro creado", usuarioNuevo);
+        return GenericResponse.getResponse(201, "Usuario creado", usuarioNuevo);
     }
 
     public GenericResponse<?> updateUser(UserRequest userRequest, Long id, BindingResult result){
         // proceso de validación
-        String errors = validaRequest(result);
+        String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al actualizar usuario", errors);
 
@@ -130,7 +119,9 @@ public class UserService {
             else
                 usuarioActual.setRole(userRequest.getRole());
             // encripta clave
-            encriptarClaveUsuario(usuarioActual);
+            helperClass.encriptarClaveUsuario(usuarioActual);
+            usuarioActual.setUserCreator(userRequest.getUserCreator());
+            usuarioActual.setUserStatus(userRequest.getUserStatus());
             usuarioEditado = userRepository.save(usuarioActual);
         } catch(DataAccessException e) {
             return GenericResponse
@@ -138,7 +129,7 @@ public class UserService {
                             "Error al actualizar usuario: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
         }
-        return GenericResponse.getResponse(200, "Registro actualizado", usuarioEditado);
+        return GenericResponse.getResponse(200, "Usuario actualizado", usuarioEditado);
     }
 
     public GenericResponse<?> deleteUser(Long id){
@@ -151,7 +142,7 @@ public class UserService {
                             null);
         }
 
-        return GenericResponse.getResponse(200, "Registro borrado", null);
+        return GenericResponse.getResponse(200, "Usuario borrado", null);
     }
 
     public GenericResponse<?> dashboard(){
@@ -166,7 +157,7 @@ public class UserService {
             dashboard.put("total", totalUsers);
             dashboard.put("activos", activeUsers);
             dashboard.put("bloqueados", lockedUsers);
-            return GenericResponse.getResponse(200, "Registro encontrado", dashboard);
+            return GenericResponse.getResponse(200, "Dashboard", dashboard);
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -186,7 +177,7 @@ public class UserService {
                 UserRequest userRequest = pasarValores(fila);
                 User user = new User();
                 user.setUsername(userRequest.getUsername());
-                encriptarClaveUserRequest(userRequest);
+                helperClass.encriptarClaveUserRequest(userRequest);
                 user.setPassword(userRequest.getPassword());
                 user.setEmail(userRequest.getEmail());
                 user.setRole(userRequest.getRole());
@@ -213,22 +204,6 @@ public class UserService {
         userRequest.setEmail(fila[2]);
         userRequest.setRole(Role.valueOf(fila[3]));
         return userRequest;
-    }
-
-
-    private String validaRequest(BindingResult result) {
-        if(result.hasErrors()) {
-            List<String> errorsList = result.getFieldErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .toList();
-            StringBuilder errors = new StringBuilder();
-            for (String error : errorsList) {
-                errors.append(error).append(" ");
-            }
-            return errors.toString();
-        }
-        return "";
     }
 
 }

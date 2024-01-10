@@ -49,7 +49,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR','ROLE_MANAGER'")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @PostMapping("/users")
     public ResponseEntity<GenericResponse<?>> guardarUsuario(@Valid @RequestBody UserRequest userRequest, BindingResult result){
         return ResponseEntity
@@ -59,7 +59,7 @@ public class UserController {
                 );
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @PutMapping("/users/{id}")
     public ResponseEntity<GenericResponse<?>> editarUsuario(@Valid @RequestBody UserRequest userRequest, @PathVariable Long id, BindingResult result){
         return ResponseEntity
@@ -69,7 +69,7 @@ public class UserController {
                 );
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @DeleteMapping("/users/{id}")
     public ResponseEntity<GenericResponse<?>> borrarUsuario(@PathVariable Long id){
         return ResponseEntity
@@ -80,7 +80,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @GetMapping("/dashboard")
     public ResponseEntity<GenericResponse<?>> getDashboard(){
         return ResponseEntity
@@ -90,8 +90,8 @@ public class UserController {
                 );
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
-    @PostMapping(value = "/csv", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
+    @PostMapping(value = "/users/csv", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<GenericResponse<?>> cargarDesdeCSV(@RequestPart(value = "archivo") MultipartFile archivo) throws IOException {
         return ResponseEntity
                 .status(HttpStatus.OK)

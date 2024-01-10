@@ -14,4 +14,8 @@ public class Dispositivo {
     @Column(name = "dispositivo_id")
     private Long id;
     private String nombre;
+
+    // un dispositivo pertenece a un servicio
+    @OneToOne(mappedBy = "dispositivo")
+    private Servicio servicio;
 }

@@ -1,10 +1,9 @@
 package com.viamatica.svbackend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.viamatica.svbackend.util.Role;
-import com.viamatica.svbackend.util.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.viamatica.svbackend.util.enums.Role;
+import com.viamatica.svbackend.util.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -68,6 +68,11 @@ public class User implements UserDetails {
 
         return authorities;
     }
+
+    // un usuario puede trabajar en varias cajas
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
+    Set<Caja> cajas;
 
     @Override
     public boolean isAccountNonExpired() {
