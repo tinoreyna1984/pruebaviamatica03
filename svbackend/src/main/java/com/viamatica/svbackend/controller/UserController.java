@@ -48,7 +48,6 @@ public class UserController {
                 );
     }
 
-
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @PostMapping("/users")
     public ResponseEntity<GenericResponse<?>> guardarUsuario(@Valid @RequestBody UserRequest request, BindingResult result){
@@ -79,9 +78,18 @@ public class UserController {
                 );
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @DeleteMapping("/users/approve/{id}")
+    public ResponseEntity<GenericResponse<?>> aprobarUsuario(@PathVariable Long id){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .body(userService.approve(id)
+                );
+    }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
-    @GetMapping("/dashboard")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR')")
+    @GetMapping("/users/dashboard")
     public ResponseEntity<GenericResponse<?>> getDashboard(){
         return ResponseEntity
                 .status(HttpStatus.OK)

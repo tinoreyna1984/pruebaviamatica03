@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContratoService implements GenericService<Contrato, ContratoRequest> {
@@ -61,9 +62,16 @@ public class ContratoService implements GenericService<Contrato, ContratoRequest
 
     @Override
     public GenericResponse<Contrato> getById(Long id) {
+        Optional<Contrato> optionalContrato = contratoRepository.findById(id);
         Contrato contrato = null;
         try {
-            contrato = contratoRepository.findById(id).get();
+            if(optionalContrato.isEmpty()){
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra el contrato con ID " + id,
+                                null);
+            }
+            contrato = optionalContrato.get();
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -88,18 +96,20 @@ public class ContratoService implements GenericService<Contrato, ContratoRequest
             return GenericResponse.getResponse(400, "Error al crear contrato", errors);
 
         // busca cliente y servicio
-        Cliente cliente = clienteRepository.findById(request.getClienteId()).get();
-        Servicio servicio = servicioRepository.findById(request.getServicioId()).get();
-        if(cliente == null)
+        Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
+        Optional<Servicio> optionalServicio = servicioRepository.findById(request.getServicioId());
+        if(optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
-        if(servicio == null)
+        Cliente cliente = optionalCliente.get();
+        if(optionalServicio.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el servicio con ID " + request.getServicioId(),
                             null);
+        Servicio servicio = optionalServicio.get();
 
         contratoNuevo.setFechaInicioContrato(request.getFechaInicioContrato());
         contratoNuevo.setFechaFinContrato(request.getFechaFinContrato());
@@ -135,27 +145,30 @@ public class ContratoService implements GenericService<Contrato, ContratoRequest
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al actualizar contrato", errors);
 
-        Contrato contratoActual = contratoRepository.findById(id).get();
+        Optional<Contrato> optionalContratoActual = contratoRepository.findById(id);
         Contrato contratoEditado = null;
-        if(contratoActual == null)
+        if(optionalContratoActual.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el contrato con ID " + id,
                             null);
+        Contrato contratoActual = optionalContratoActual.get();
 
         // busca cliente y servicio
-        Cliente cliente = clienteRepository.findById(request.getClienteId()).get();
-        Servicio servicio = servicioRepository.findById(request.getServicioId()).get();
-        if(cliente == null)
+        Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
+        Optional<Servicio> optionalServicio = servicioRepository.findById(request.getServicioId());
+        if(optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
-        if(servicio == null)
+        Cliente cliente = optionalCliente.get();
+        if(optionalServicio.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el servicio con ID " + request.getServicioId(),
                             null);
+        Servicio servicio = optionalServicio.get();
 
         contratoActual.setFechaInicioContrato(request.getFechaInicioContrato());
         contratoActual.setFechaFinContrato(request.getFechaFinContrato());

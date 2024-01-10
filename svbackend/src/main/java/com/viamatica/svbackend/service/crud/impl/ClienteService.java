@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteService implements GenericService<Cliente, ClienteRequest> {
@@ -58,9 +59,16 @@ public class ClienteService implements GenericService<Cliente, ClienteRequest> {
 
     @Override
     public GenericResponse<Cliente> getById(Long id){
-        Cliente cliente = null;
+        Cliente cliente;
+        Optional<Cliente> optionalCliente = clienteRepository.findById(id);
         try {
-            cliente = clienteRepository.findById(id).get();
+            if(optionalCliente.isEmpty()){
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra el cliente con ID " + id,
+                                null);
+            }
+            cliente = optionalCliente.get();
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -76,7 +84,15 @@ public class ClienteService implements GenericService<Cliente, ClienteRequest> {
     }
 
     @Override
-    public GenericResponse<?> save(ClienteRequest clienteRequest, BindingResult result){
+    public GenericResponse<?> save(ClienteRequest request, BindingResult result){
+
+        // valida que no exista cliente
+        Optional<Cliente> optionalCliente = clienteRepository.findByDocId(request.getDocId());
+        if(optionalCliente.isPresent()){
+            Cliente clienteExistente = optionalCliente.get();
+            return GenericResponse.getResponse(400, "El cliente con documento " + request.getDocId() + " ya existe.", clienteExistente);
+        }
+
         Cliente clienteNuevo = new Cliente();
 
         // proceso de validación
@@ -84,13 +100,13 @@ public class ClienteService implements GenericService<Cliente, ClienteRequest> {
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al crear cliente", errors);
 
-        clienteNuevo.setName(clienteRequest.getName());
-        clienteNuevo.setLastName(clienteRequest.getLastName());
-        clienteNuevo.setDocId(clienteRequest.getDocId());
-        clienteNuevo.setEmail(clienteRequest.getEmail());
-        clienteNuevo.setPhone(clienteRequest.getPhone());
-        clienteNuevo.setAddress(clienteRequest.getAddress());
-        clienteNuevo.setRefAddress(clienteRequest.getRefAddress());
+        clienteNuevo.setName(request.getName());
+        clienteNuevo.setLastName(request.getLastName());
+        clienteNuevo.setDocId(request.getDocId());
+        clienteNuevo.setEmail(request.getEmail());
+        clienteNuevo.setPhone(request.getPhone());
+        clienteNuevo.setAddress(request.getAddress());
+        clienteNuevo.setRefAddress(request.getRefAddress());
 
         try {
             clienteNuevo = clienteRepository.save(clienteNuevo);
@@ -110,29 +126,31 @@ public class ClienteService implements GenericService<Cliente, ClienteRequest> {
     }
 
     @Override
-    public GenericResponse<?> update(ClienteRequest clienteRequest, Long id, BindingResult result){
+    public GenericResponse<?> update(ClienteRequest request, Long id, BindingResult result){
         // proceso de validación
         String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al actualizar cliente", errors);
 
-        Cliente clienteActual = clienteRepository.findById(id).get();
+        Cliente clienteActual;
+        Optional<Cliente> optionalClienteActual = clienteRepository.findById(id);
         Cliente clienteEditado = null;
 
-        if(clienteActual == null)
+        if(optionalClienteActual.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + id,
                             null);
+        clienteActual = optionalClienteActual.get();
 
         try {
-            clienteActual.setName(clienteRequest.getName());
-            clienteActual.setLastName(clienteRequest.getLastName());
-            clienteActual.setDocId(clienteRequest.getDocId());
-            clienteActual.setEmail(clienteRequest.getEmail());
-            clienteActual.setPhone(clienteRequest.getPhone());
-            clienteActual.setAddress(clienteRequest.getAddress());
-            clienteActual.setRefAddress(clienteRequest.getRefAddress());
+            clienteActual.setName(request.getName());
+            clienteActual.setLastName(request.getLastName());
+            clienteActual.setDocId(request.getDocId());
+            clienteActual.setEmail(request.getEmail());
+            clienteActual.setPhone(request.getPhone());
+            clienteActual.setAddress(request.getAddress());
+            clienteActual.setRefAddress(request.getRefAddress());
             clienteEditado = clienteRepository.save(clienteActual);
         } catch(DataAccessException e) {
             return GenericResponse

@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService implements GenericService<User, UserRequest> {
@@ -62,9 +63,16 @@ public class UserService implements GenericService<User, UserRequest> {
 
     @Override
     public GenericResponse<User> getById(Long id){
-        User usuario = null;
+        Optional<User> optionalUser = userRepository.findById(id);
+        User usuario;
         try {
-            usuario = userRepository.findById(id).get();
+            if(optionalUser.isEmpty()){
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra el usuario con ID " + id,
+                                null);
+            }
+            usuario = optionalUser.get();
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -81,6 +89,15 @@ public class UserService implements GenericService<User, UserRequest> {
 
     @Override
     public GenericResponse<?> save(UserRequest request, BindingResult result){
+        // verificar que el nombre de usuario no haya sido previamente usado
+        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
+        if(optionalUser.isPresent()){
+            return GenericResponse
+                    .getResponse(400,
+                            "Ya existe usuario con nombre de sesión " + request.getUsername(),
+                            null);
+        }
+
         User usuarioNuevo = new User();
 
         // si no viaja el ROL, por defecto debe ser el de USUARIO
@@ -126,13 +143,14 @@ public class UserService implements GenericService<User, UserRequest> {
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al actualizar usuario", errors);
 
-        User usuarioActual = userRepository.findById(id).get();
+        Optional<User> optionalUser = userRepository.findById(id);
         User usuarioEditado = null;
-        if(usuarioActual == null)
+        if(optionalUser.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el usuario con ID " + id,
                             null);
+        User usuarioActual = optionalUser.get();
         try {
             usuarioActual.setEmail(request.getEmail());
             usuarioActual.setUsername(request.getUsername());
@@ -204,6 +222,24 @@ public class UserService implements GenericService<User, UserRequest> {
                             "Error inesperado: " + e.getMessage(),
                             null);
         }
+    }
+
+    public GenericResponse<?> approve(Long id){
+        try {
+            userRepository.approveUser(id);
+        }catch(DataAccessException e) {
+            return GenericResponse
+                    .getResponse(500,
+                            "Error al realizar la consulta en la base de datos: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
+                            null);
+        }
+
+        return GenericResponse.getResponse(200, "Se aprueba al usuario", null);
     }
 
     public GenericResponse<?> cargarDesdeCSV(MultipartFile archivo) throws IOException {

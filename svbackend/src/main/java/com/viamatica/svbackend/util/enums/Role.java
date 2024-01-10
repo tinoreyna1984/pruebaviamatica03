@@ -22,12 +22,12 @@ public enum Role {
                     Route.ATTENTIONS,
                     Route.CONTRACTS,
                     Route.CUSTOMERS,
-                    Route.USERS
+                    Route.USERS,
+                    Route.DASHBOARD
             )
     ),
     MANAGER(
             Arrays.asList(
-
                     Permission.SAVE_ONE_USER,
                     Permission.MODIFY_ONE_USER,
                     Permission.DELETE_ONE_USER,

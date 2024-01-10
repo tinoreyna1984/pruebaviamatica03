@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -33,14 +34,14 @@ public class AuthenticationService {
 
         authenticationManager.authenticate(authToken);
 
-        User user = userRepository.findByUsername(authRequest.getUsername()).get();
-
-        if(user == null){
+        Optional<User> optionalUser = userRepository.findByUsername(authRequest.getUsername());
+        if(optionalUser.isEmpty()){
             return GenericResponse
-                    .getResponse(404,
+                    .getResponse(400,
                             "No se encuentra el usuario.",
                             null);
         }
+        User user = optionalUser.get();
 
         if(user.getUserStatus() == UserStatus.NOT_APPROVED){
             return GenericResponse

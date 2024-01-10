@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AtencionService implements GenericService<Atencion, AtencionRequest> {
@@ -59,10 +60,16 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
 
     @Override
     public GenericResponse<Atencion> getById(Long id){
-        Atencion atencion = null;
+        Atencion atencion;
+        Optional<Atencion> optionalAtencion  = atencionRepository.findById(id);
         try {
-            atencion = atencionRepository.findById(id).get();
-        }catch(DataAccessException e) {
+            if(optionalAtencion.isEmpty())
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra la atención con ID " + id,
+                                null);
+            atencion = optionalAtencion.get();
+        } catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
                             "Error al buscar atención: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
@@ -86,20 +93,20 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
             return GenericResponse.getResponse(400, "Error al crear atención", errors);
 
         // busca cliente y caja
-        Cliente cliente = new Cliente();
-        Caja caja = new Caja();
-        cliente = clienteRepository.findById(request.getClienteId()).get();
-        caja = cajaRepository.findById(request.getCajaId()).get();
-        if(cliente == null)
+        Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
+        Optional<Caja> optionalCaja = cajaRepository.findById(request.getCajaId());
+        if(optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
-        if(caja == null)
+        Cliente cliente = optionalCliente.get();
+        if(optionalCaja.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la caja con ID " + request.getCajaId(),
                             null);
+        Caja caja = optionalCaja.get();
 
         atencionNueva.setAttentionType(request.getAttentionType());
         atencionNueva.setAttentionStatus(request.getAttentionStatus());
@@ -131,27 +138,30 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al actualizar atención", errors);
 
-        Atencion atencionActual = atencionRepository.findById(id).get();
+        Optional<Atencion> optionalAtencion = atencionRepository.findById(id);
         Atencion atencionEditada = null;
-        if(atencionActual == null)
+        if(optionalAtencion.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la atención con ID " + id,
                             null);
+        Atencion atencionActual = optionalAtencion.get();
 
         // busca cliente y caja
-        Cliente cliente = clienteRepository.findById(request.getClienteId()).get();
-        Caja caja = cajaRepository.findById(request.getCajaId()).get();
-        if(cliente == null)
+        Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
+        Optional<Caja> optionalCaja = cajaRepository.findById(request.getCajaId());
+        if(optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
-        if(caja == null)
+        Cliente cliente = optionalCliente.get();
+        if(optionalCaja.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la caja con ID " + request.getCajaId(),
                             null);
+        Caja caja = optionalCaja.get();
 
         atencionActual.setAttentionType(request.getAttentionType());
         atencionActual.setAttentionStatus(request.getAttentionStatus());

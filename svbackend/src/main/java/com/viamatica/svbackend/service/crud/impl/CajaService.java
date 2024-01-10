@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CajaService implements GenericService<Caja, CajaRequest> {
@@ -51,9 +52,16 @@ public class CajaService implements GenericService<Caja, CajaRequest> {
 
     @Override
     public GenericResponse<Caja> getById(Long id) {
-        Caja caja = null;
+        Caja caja;
+        Optional<Caja> optionalCaja = cajaRepository.findById(id);
         try {
-            caja = cajaRepository.findById(id).get();
+            if(optionalCaja.isEmpty()){
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra la caja con ID " + id,
+                                null);
+            }
+            caja = optionalCaja.get();
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -105,13 +113,14 @@ public class CajaService implements GenericService<Caja, CajaRequest> {
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al crear caja", errors);
 
-        Caja cajaActual = cajaRepository.findById(id).get();
-        Caja cajaEditada = null;
-        if(cajaActual == null)
+        Optional<Caja> optionalCaja = cajaRepository.findById(id);
+        Caja cajaEditada;
+        if(optionalCaja.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la caja con ID " + id,
                             null);
+        Caja cajaActual = optionalCaja.get();
         cajaActual.setDescripcion(request.getDescripcion());
         cajaActual.setActive(request.isActive());
 

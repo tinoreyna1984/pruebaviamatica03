@@ -7,6 +7,7 @@ public enum Route {
     HOME("Inicio",""),
     CUSTOMERS("Clientes","customers"),
     USERS("Usuarios","users"),
+    DASHBOARD("Dashboard", "dashboard"),
     ATTENTIONS("Atenciones", "attentions"),
     CONTRACTS("Contratos", "contracts")
     ;

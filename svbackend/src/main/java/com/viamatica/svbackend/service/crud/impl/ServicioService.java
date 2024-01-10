@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServicioService implements GenericService<Servicio, ServicioRequest> {
@@ -53,9 +54,16 @@ public class ServicioService implements GenericService<Servicio, ServicioRequest
 
     @Override
     public GenericResponse<Servicio> getById(Long id) {
-        Servicio servicio = null;
+        Optional<Servicio> optionalServicio = servicioRepository.findById(id);
+        Servicio servicio;
         try {
-            servicio = servicioRepository.findById(id).get();
+            if(optionalServicio.isEmpty()){
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra el servicio con ID " + id,
+                                null);
+            }
+            servicio = optionalServicio.get();
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -79,12 +87,14 @@ public class ServicioService implements GenericService<Servicio, ServicioRequest
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al crear dispositivo", errors);
 
-        Dispositivo dispositivo = dispositivoRepository.findById(request.getDispositivoId()).get();
-        if(dispositivo == null)
+        Optional<Dispositivo> optionalDispositivo = dispositivoRepository.findById(request.getDispositivoId());
+        if(optionalDispositivo.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el dispositivo con ID " + request.getDispositivoId(),
                             null);
+        Dispositivo dispositivo = optionalDispositivo.get();
+
         servicioNuevo.setDescripcion(request.getDescripcion());
         servicioNuevo.setPrecio(request.getPrecio());
         servicioNuevo.setDispositivo(dispositivo);
@@ -114,19 +124,23 @@ public class ServicioService implements GenericService<Servicio, ServicioRequest
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al crear dispositivo", errors);
 
-        Servicio servicioActual = servicioRepository.findById(id).get();
-        Servicio servicioEditado = null;
-        if(servicioActual == null)
+        Optional<Servicio> optionalServicioActual = servicioRepository.findById(id);
+        Servicio servicioEditado;
+        if(optionalServicioActual.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el servicio con ID " + id,
                             null);
-        Dispositivo dispositivo = dispositivoRepository.findById(request.getDispositivoId()).get();
-        if(dispositivo == null)
+        Servicio servicioActual = optionalServicioActual.get();
+
+        Optional<Dispositivo> optionalDispositivo = dispositivoRepository.findById(request.getDispositivoId());
+        if(optionalDispositivo.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el dispositivo con ID " + request.getDispositivoId(),
                             null);
+        Dispositivo dispositivo = optionalDispositivo.get();
+
         servicioActual.setDescripcion(request.getDescripcion());
         servicioActual.setPrecio(request.getPrecio());
         servicioActual.setDispositivo(dispositivo);

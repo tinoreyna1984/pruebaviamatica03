@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DispositivoService implements GenericService<Dispositivo, DispositivoRequest> {
@@ -49,9 +50,16 @@ public class DispositivoService implements GenericService<Dispositivo, Dispositi
 
     @Override
     public GenericResponse<Dispositivo> getById(Long id) {
-        Dispositivo dispositivo = null;
+        Optional<Dispositivo> optionalDispositivo = dispositivoRepository.findById(id);
+        Dispositivo dispositivo;
         try {
-            dispositivo = dispositivoRepository.findById(id).get();
+            if(optionalDispositivo.isEmpty()){
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra el dispositivo con ID " + id,
+                                null);
+            }
+            dispositivo = optionalDispositivo.get();
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -102,13 +110,14 @@ public class DispositivoService implements GenericService<Dispositivo, Dispositi
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al crear dispositivo", errors);
 
-        Dispositivo dispositivoActual = dispositivoRepository.findById(id).get();
+        Optional<Dispositivo> optionalDispositivoActual = dispositivoRepository.findById(id);
         Dispositivo dispositivoEditado = null;
-        if(dispositivoActual == null)
+        if(optionalDispositivoActual.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el dispositivo con ID " + id,
                             null);
+        Dispositivo dispositivoActual = optionalDispositivoActual.get();
 
         dispositivoActual.setNombre(request.getNombre());
 

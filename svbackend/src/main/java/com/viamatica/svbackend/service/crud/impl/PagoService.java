@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PagoService implements GenericService<Pago, PagoRequest> {
@@ -55,9 +56,16 @@ public class PagoService implements GenericService<Pago, PagoRequest> {
 
     @Override
     public GenericResponse<Pago> getById(Long id) {
-        Pago pago = null;
+        Pago pago;
+        Optional<Pago> optionalPago = pagoRepository.findById(id);
         try {
-            pago = pagoRepository.findById(id).get();
+            if(optionalPago.isEmpty()){
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra el pago con ID " + id,
+                                null);
+            }
+            pago = optionalPago.get();
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
@@ -82,12 +90,13 @@ public class PagoService implements GenericService<Pago, PagoRequest> {
             return GenericResponse.getResponse(400, "Error al crear pago", errors);
 
         // busca cliente
-        Cliente cliente = clienteRepository.findById(request.getClienteId()).get();
-        if(cliente == null)
+        Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
+        if(optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
+        Cliente cliente = optionalCliente.get();
 
         pagoNuevo.setFechaPago(request.getFechaPago());
         pagoNuevo.setCliente(cliente);
@@ -117,21 +126,23 @@ public class PagoService implements GenericService<Pago, PagoRequest> {
         if (!errors.isEmpty())
             return GenericResponse.getResponse(400, "Error al crear pago", errors);
 
-        Pago pagoActual = pagoRepository.findById(id).get();
-        Pago pagoEditado = null;
-        if(pagoActual == null)
+        Optional<Pago> optionalPagoActual = pagoRepository.findById(id);
+        Pago pagoEditado;
+        if(optionalPagoActual.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el pago con ID " + id,
                             null);
+        Pago pagoActual = optionalPagoActual.get();
 
         // busca cliente
-        Cliente cliente = clienteRepository.findById(request.getClienteId()).get();
-        if(cliente == null)
+        Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
+        if(optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
+        Cliente cliente = optionalCliente.get();
 
         pagoActual.setFechaPago(request.getFechaPago());
         pagoActual.setCliente(cliente);
