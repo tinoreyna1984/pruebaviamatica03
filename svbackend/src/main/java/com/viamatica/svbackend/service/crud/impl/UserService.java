@@ -5,7 +5,9 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
+import com.viamatica.svbackend.model.entity.Caja;
 import com.viamatica.svbackend.model.entity.User;
+import com.viamatica.svbackend.repository.CajaRepository;
 import com.viamatica.svbackend.repository.UserRepository;
 import com.viamatica.svbackend.service.crud.GenericService;
 import com.viamatica.svbackend.util.enums.Role;
@@ -33,6 +35,8 @@ public class UserService implements GenericService<User, UserRequest> {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CajaRepository cajaRepository;
     private final HelperClass helperClass = new HelperClass();
 
     @Override
@@ -200,16 +204,13 @@ public class UserService implements GenericService<User, UserRequest> {
 
     public GenericResponse<?> dashboard(){
         Map<String, Object> dashboard = new HashMap<>();
-        long totalUsers = 0L;
-        long activeUsers = 0L;
-        long lockedUsers = 0L;
+        long approvedUsers = 0L;
+        long operatorsCount = 0L;
         try {
-            /*totalUsers = userRepository.totalUsers();
-            activeUsers = userRepository.totalActiveUsers();
-            lockedUsers = userRepository.totalLockedUsers();*/
-            dashboard.put("total", totalUsers);
-            dashboard.put("activos", activeUsers);
-            dashboard.put("bloqueados", lockedUsers);
+            approvedUsers = userRepository.approvedUsers();
+            operatorsCount = userRepository.operatorsCount();
+            dashboard.put("aprobados", approvedUsers);
+            dashboard.put("cajeros", operatorsCount);
             return GenericResponse.getResponse(200, "Dashboard", dashboard);
         }catch(DataAccessException e) {
             return GenericResponse
@@ -240,6 +241,37 @@ public class UserService implements GenericService<User, UserRequest> {
         }
 
         return GenericResponse.getResponse(200, "Se aprueba al usuario", null);
+    }
+
+    public GenericResponse<?> asignaCaja(Long usuarioId, Long cajaId){
+        User user = userRepository.findById(usuarioId).orElseThrow();
+        Caja caja = cajaRepository.findById(cajaId).orElseThrow();
+        if(userRepository.limiteCajaPorUsuario(usuarioId) >= 2){
+            return GenericResponse
+                    .getResponse(400,
+                            "El usuario " + user.getUsername() + " no debe tener más de 2 cajas asignadas.",
+                            null);
+        }
+        if(userRepository.verificaUsuariosCajas(usuarioId, cajaId) > 0L){
+            return GenericResponse
+                    .getResponse(400,
+                            "El usuario " + user.getUsername() + " ya tiene asignada la caja " + caja.getDescripcion(),
+                            null);
+        }
+        try {
+            userRepository.agregaUsuarioACaja(usuarioId, cajaId);
+        }catch(DataAccessException e) {
+            return GenericResponse
+                    .getResponse(500,
+                            "Error al realizar la operación en la base de datos: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
+                            null);
+        }
+        return GenericResponse.getResponse(200, "El usuario " + user.getUsername() + " es asignado a la caja " + caja.getDescripcion(), null);
     }
 
     public GenericResponse<?> cargarDesdeCSV(MultipartFile archivo) throws IOException {

@@ -1,5 +1,6 @@
 package com.viamatica.svbackend.controller;
 
+import com.viamatica.svbackend.model.dto.request.UserCajaRequest;
 import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.User;
@@ -79,7 +80,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
-    @DeleteMapping("/users/approve/{id}")
+    @GetMapping("/users/approve/{id}")
     public ResponseEntity<GenericResponse<?>> aprobarUsuario(@PathVariable Long id){
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -88,9 +89,19 @@ public class UserController {
                 );
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
+    @PostMapping("/users/asigna-caja")
+    public ResponseEntity<GenericResponse<?>> asignaUsuarioACaja(@RequestBody UserCajaRequest request){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .body(userService.asignaCaja(request.getUserId(), request.getCajaId())
+                );
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR')")
     @GetMapping("/users/dashboard")
-    public ResponseEntity<GenericResponse<?>> getDashboard(){
+    public ResponseEntity<GenericResponse<?>> getUsersDashboard(){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
