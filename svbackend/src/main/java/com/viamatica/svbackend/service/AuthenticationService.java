@@ -26,15 +26,6 @@ public class AuthenticationService {
     @Autowired
     private JwtService jwtService;
 
-    // codificador de password
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    private void encriptarClaveUsuario(User user) {
-        String claveEncriptada = passwordEncoder.encode(user.getPassword());
-        user.setPassword(claveEncriptada);
-    }
-
     public GenericResponse<?> login(AuthenticationRequest authRequest) {
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -71,6 +62,11 @@ public class AuthenticationService {
             return GenericResponse
                     .getResponse(401,
                             "Error en las credenciales: " + e.getMessage(),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
                             null);
         }
 

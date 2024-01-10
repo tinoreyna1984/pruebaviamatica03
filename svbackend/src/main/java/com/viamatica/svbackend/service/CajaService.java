@@ -18,7 +18,7 @@ public class CajaService {
     @Autowired
     private CajaRepository cajaRepository;
 
-    public GenericResponse<?> getCajas(Integer page, Integer size){
+    public GenericResponse<?> get(Integer page, Integer size){
         try{
             if (page != null && size != null){
                 Pageable pageable = PageRequest.of(page, size);
@@ -33,6 +33,11 @@ public class CajaService {
             return GenericResponse
                     .getResponse(500,
                             "Error al consultar cajas: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
                             null);
         }
     }

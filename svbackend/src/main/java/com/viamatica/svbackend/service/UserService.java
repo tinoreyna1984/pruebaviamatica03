@@ -15,7 +15,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,13 +27,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UserService {
+public class UserService implements GenericService<User, UserRequest> {
 
     @Autowired
     private UserRepository userRepository;
     private final HelperClass helperClass = new HelperClass();
 
-    public GenericResponse<?> getUsers(Integer page, Integer size){
+    @Override
+    public GenericResponse<?> get(Integer page, Integer size){
         try{
             if (page != null && size != null) {
                 // Si se proporcionan los parámetros de paginación, devuelve una lista paginada
@@ -51,10 +51,16 @@ public class UserService {
                     .getResponse(500,
                             "Error al consultar usuarios: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
+                            null);
         }
     }
 
-    public GenericResponse<User> getUser(Long id){
+    @Override
+    public GenericResponse<User> getById(Long id){
         User usuario = null;
         try {
             usuario = userRepository.findById(id).get();
@@ -63,11 +69,17 @@ public class UserService {
                     .getResponse(500,
                             "Error al buscar usuario: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
+                            null);
         }
         return GenericResponse.getResponse(200, "Usuario encontrado", usuario);
     }
 
-    public GenericResponse<?> saveUser(UserRequest userRequest, BindingResult result){
+    @Override
+    public GenericResponse<?> save(UserRequest userRequest, BindingResult result){
         User usuarioNuevo = new User();
 
         // si no viaja el ROL, por defecto debe ser el de USUARIO
@@ -96,12 +108,18 @@ public class UserService {
                     .getResponse(500,
                             "Error al crear usuario: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
+                            null);
         }
 
         return GenericResponse.getResponse(201, "Usuario creado", usuarioNuevo);
     }
 
-    public GenericResponse<?> updateUser(UserRequest userRequest, Long id, BindingResult result){
+    @Override
+    public GenericResponse<?> update(UserRequest userRequest, Long id, BindingResult result){
         // proceso de validación
         String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
@@ -128,17 +146,28 @@ public class UserService {
                     .getResponse(500,
                             "Error al actualizar usuario: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
+                            null);
         }
         return GenericResponse.getResponse(200, "Usuario actualizado", usuarioEditado);
     }
 
-    public GenericResponse<?> deleteUser(Long id){
+    @Override
+    public GenericResponse<?> delete(Long id){
         try {
             userRepository.deleteById(id);
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
                             "Error al realizar la consulta en la base de datos: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
                             null);
         }
 
@@ -162,6 +191,11 @@ public class UserService {
             return GenericResponse
                     .getResponse(500,
                             "Error al obtener valores del dashboard: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
                             null);
         }
     }
@@ -193,6 +227,11 @@ public class UserService {
             return GenericResponse
                     .getResponse(500,
                             "Error al cargar desde CSV: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
                             null);
         }
     }

@@ -34,7 +34,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(clienteService.getClientes(page, size)
+                .body(clienteService.get(page, size)
                 );
     }
 
@@ -44,7 +44,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(clienteService.getCliente(id)
+                .body(clienteService.getById(id)
                 );
     }
 
@@ -55,7 +55,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(clienteService.saveCliente(clienteRequest, result)
+                .body(clienteService.save(clienteRequest, result)
                 );
     }
 
@@ -65,7 +65,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(clienteService.updateCliente(clienteRequest, id, result)
+                .body(clienteService.update(clienteRequest, id, result)
                 );
     }
 
@@ -75,7 +75,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(clienteService.deleteCliente(id)
+                .body(clienteService.delete(id)
                 );
     }
 

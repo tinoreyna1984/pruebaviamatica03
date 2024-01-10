@@ -29,7 +29,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
     private final HelperClass helperClass = new HelperClass();
 
-    public GenericResponse<?> getClientes(Integer page, Integer size){
+    public GenericResponse<?> get(Integer page, Integer size){
         try{
             if (page != null && size != null) {
                 // Si se proporcionan los parámetros de paginación, devuelve una lista paginada
@@ -46,10 +46,15 @@ public class ClienteService {
                     .getResponse(500,
                             "Error al consultar clientes: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
+                            null);
         }
     }
 
-    public GenericResponse<Cliente> getCliente(Long id){
+    public GenericResponse<Cliente> getById(Long id){
         Cliente cliente = null;
         try {
             cliente = clienteRepository.findById(id).get();
@@ -58,11 +63,16 @@ public class ClienteService {
                     .getResponse(500,
                             "Error al buscar cliente: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error desconocido: " + e.getMessage(),
+                            null);
         }
         return GenericResponse.getResponse(200, "Cliente encontrado", cliente);
     }
 
-    public GenericResponse<?> saveCliente(ClienteRequest clienteRequest, BindingResult result){
+    public GenericResponse<?> save(ClienteRequest clienteRequest, BindingResult result){
         Cliente clienteNuevo = new Cliente();
 
         // proceso de validación
@@ -85,12 +95,17 @@ public class ClienteService {
                     .getResponse(500,
                             "Error al crear cliente: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
+                            null);
         }
 
         return GenericResponse.getResponse(201, "Cliente creado", clienteNuevo);
     }
 
-    public GenericResponse<?> updateCliente(ClienteRequest clienteRequest, Long id, BindingResult result){
+    public GenericResponse<?> update(ClienteRequest clienteRequest, Long id, BindingResult result){
         // proceso de validación
         String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
@@ -112,17 +127,27 @@ public class ClienteService {
                     .getResponse(500,
                             "Error al actualizar cliente: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
+                            null);
         }
         return GenericResponse.getResponse(200, "Cliente actualizado", clienteEditado);
     }
 
-    public GenericResponse<?> deleteCliente(Long id){
+    public GenericResponse<?> delete(Long id){
         try {
             clienteRepository.deleteById(id);
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
                             "Error al realizar la consulta en la base de datos: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
 
@@ -158,6 +183,11 @@ public class ClienteService {
             return GenericResponse
                     .getResponse(500,
                             "Error al cargar desde CSV: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
                             null);
         }
     }

@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(userService.getUsers(page, size)
+                .body(userService.get(page, size)
                 );
     }
 
@@ -44,7 +44,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(userService.getUser(id)
+                .body(userService.getById(id)
                 );
     }
 
@@ -55,7 +55,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(userService.saveUser(userRequest, result)
+                .body(userService.save(userRequest, result)
                 );
     }
 
@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(userService.updateUser(userRequest, id, result)
+                .body(userService.update(userRequest, id, result)
                 );
     }
 
@@ -75,7 +75,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(userService.deleteUser(id)
+                .body(userService.delete(id)
                 );
     }
 
