@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
@@ -78,7 +79,11 @@ public class AuthenticationService {
         extraClaims.put("username", user.getUsername());
         extraClaims.put("role", user.getRole().name());
         extraClaims.put("permissions", user.getAuthorities());
-        extraClaims.put("routes", user.getRole().getRoutes());
+        extraClaims.put("routes",
+                user.getRole()
+                        .getRoutes().stream()
+                        .map(route -> Map.of("name", route.getName(), "path", route.getPath()))
+                        .collect(Collectors.toList())); // rutas
 
         return extraClaims;
     }
