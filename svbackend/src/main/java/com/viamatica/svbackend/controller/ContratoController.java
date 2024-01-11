@@ -1,9 +1,9 @@
 package com.viamatica.svbackend.controller;
 
-import com.viamatica.svbackend.model.dto.request.AtencionRequest;
+import com.viamatica.svbackend.model.dto.request.ContratoRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
-import com.viamatica.svbackend.model.entity.Atencion;
-import com.viamatica.svbackend.service.crud.impl.AtencionService;
+import com.viamatica.svbackend.model.entity.Contrato;
+import com.viamatica.svbackend.service.crud.impl.ContratoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,62 +16,62 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @SecurityRequirement(name = "bearerAuth")
-public class AtencionController {
+public class ContratoController {
 
     @Autowired
-    private AtencionService atencionService;
+    private ContratoService contratoService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
-    @GetMapping("/atenciones")
+    @GetMapping("/contratos")
     // devuelve una lista completa o paginada si viajan parámetros de paginación
-    public ResponseEntity<GenericResponse<?>> listarAtenciones(
+    public ResponseEntity<GenericResponse<?>> listarContratos(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(atencionService.get(page, size)
+                .body(contratoService.get(page, size)
                 );
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
-    @GetMapping("/atenciones/{id}")
-    public ResponseEntity<GenericResponse<Atencion>> buscarAtencion(@PathVariable Long id){
+    @GetMapping("/contratos/{id}")
+    public ResponseEntity<GenericResponse<Contrato>> buscarContrato(@PathVariable Long id){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(atencionService.getById(id)
+                .body(contratoService.getById(id)
                 );
     }
 
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
-    @PostMapping("/atenciones")
-    public ResponseEntity<GenericResponse<?>> guardarAtencion(@Valid @RequestBody AtencionRequest request, BindingResult result){
+    @PostMapping("/contratos")
+    public ResponseEntity<GenericResponse<?>> guardarContrato(@Valid @RequestBody ContratoRequest request, BindingResult result){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(atencionService.save(request, result)
+                .body(contratoService.save(request, result)
                 );
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
-    @PutMapping("/atenciones/{id}")
-    public ResponseEntity<GenericResponse<?>> editarAtencion(@Valid @RequestBody AtencionRequest request, @PathVariable Long id, BindingResult result){
+    @PutMapping("/contratos/{id}")
+    public ResponseEntity<GenericResponse<?>> editarContrato(@Valid @RequestBody ContratoRequest request, @PathVariable Long id, BindingResult result){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(atencionService.update(request, id, result)
+                .body(contratoService.update(request, id, result)
                 );
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
-    @DeleteMapping("/atenciones/{id}")
-    public ResponseEntity<GenericResponse<?>> borrarAtencion(@PathVariable Long id){
+    @DeleteMapping("/contratos/{id}")
+    public ResponseEntity<GenericResponse<?>> borrarContrato(@PathVariable Long id){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
-                .body(atencionService.delete(id)
+                .body(contratoService.delete(id)
                 );
     }
 
