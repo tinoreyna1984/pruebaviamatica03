@@ -1,0 +1,77 @@
+package com.viamatica.svbackend.controller;
+
+import com.viamatica.svbackend.model.dto.request.PagoRequest;
+import com.viamatica.svbackend.model.dto.response.GenericResponse;
+import com.viamatica.svbackend.model.entity.Pago;
+import com.viamatica.svbackend.service.crud.impl.PagoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+@SecurityRequirement(name = "bearerAuth")
+public class PagoController {
+    @Autowired
+    private PagoService pagoService;
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
+    @GetMapping("/pagos")
+    // devuelve una lista completa o paginada si viajan parámetros de paginación
+    public ResponseEntity<GenericResponse<?>> listarPagos(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .body(pagoService.get(page, size)
+                );
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
+    @GetMapping("/pagos/{id}")
+    public ResponseEntity<GenericResponse<Pago>> buscarPago(@PathVariable Long id){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .body(pagoService.getById(id)
+                );
+    }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
+    @PostMapping("/pagos")
+    public ResponseEntity<GenericResponse<?>> guardarPago(@Valid @RequestBody PagoRequest request, BindingResult result){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .body(pagoService.save(request, result)
+                );
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
+    @PutMapping("/pagos/{id}")
+    public ResponseEntity<GenericResponse<?>> editarPago(@Valid @RequestBody PagoRequest request, @PathVariable Long id, BindingResult result){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .body(pagoService.update(request, id, result)
+                );
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
+    @DeleteMapping("/pagos/{id}")
+    public ResponseEntity<GenericResponse<?>> borrarPago(@PathVariable Long id){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .body(pagoService.delete(id)
+                );
+    }
+
+}

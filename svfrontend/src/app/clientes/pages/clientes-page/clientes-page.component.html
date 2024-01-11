@@ -1,1 +1,72 @@
-<p>clientes-page works!</p>
+<h1>Módulo de clientes</h1>
+
+<div class="row d-flex align-baseline my-2">
+  <div class="mat-elevation-z8 table-responsive">
+    <table mat-table [dataSource]="dataSource" [hidden]="loading">
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let cliente"> {{dataSource.filteredData.indexOf(cliente) + 1}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let cliente">
+          {{ cliente.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef>Apellido</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.lastName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="docId">
+        <th mat-header-cell *matHeaderCellDef>Doc.</th>
+        <td mat-cell *matCellDef="let cliente">
+          {{ cliente.docId }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Correo</th>
+        <td mat-cell *matCellDef="let cliente">
+          {{ cliente.email }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Fono</th>
+        <td mat-cell *matCellDef="let cliente">
+          {{ cliente.phone }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef>Dirección</th>
+        <td mat-cell *matCellDef="let cliente">
+          {{ cliente.address }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="refAddress">
+        <th mat-header-cell *matHeaderCellDef>Referencia</th>
+        <td mat-cell *matCellDef="let cliente">
+          {{ cliente.refAddress }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="modificar">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let cliente">Modificar</td>
+      </ng-container>
+      <ng-container matColumnDef="borrar">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let cliente">Borrar</td>
+      </ng-container>
+    </table>
+    <app-spinner [loading]="this.loading"></app-spinner>
+
+    <mat-paginator
+      [disabled]="loading"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Recorrer páginas"
+    >
+    </mat-paginator>
+  </div>
+</div>
+

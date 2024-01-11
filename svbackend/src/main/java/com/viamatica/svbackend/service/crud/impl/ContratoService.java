@@ -44,8 +44,8 @@ public class ContratoService implements GenericService<Contrato, ContratoRequest
                 return GenericResponse.getResponse(200, "Se encuentran los contratos", pageResult);
             } else {
                 // Si no se proporcionan los parámetros de paginación, devuelve una lista completa
-                List<Contrato> users = contratoRepository.findAll();
-                return GenericResponse.getResponse(200, "Se encuentran los contratos", users);
+                List<Contrato> contratos = contratoRepository.findAll();
+                return GenericResponse.getResponse(200, "Se encuentran los contratos", contratos);
             }
         } catch (DataAccessException e){
             return GenericResponse
