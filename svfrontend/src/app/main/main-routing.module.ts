@@ -13,6 +13,22 @@ const routes: Routes = [
           component: MainPageComponent,
         },
         {
+          path: 'attentions',
+          loadChildren: () => import('../atenciones/atenciones.module').then( m => m.AtencionesModule ),
+        },
+        {
+          path: 'customers',
+          loadChildren: () => import('../clientes/clientes.module').then( m => m.ClientesModule ),
+        },
+        {
+          path: 'contracts',
+          loadChildren: () => import('../contratos/contratos.module').then( m => m.ContratosModule ),
+        },
+        {
+          path: 'dashboard',
+          loadChildren: () => import('../dashboard/dashboard.module').then( m => m.DashboardModule ),
+        },
+        {
           path: 'users',
           loadChildren: () => import('../users/users.module').then( m => m.UsersModule ),
         },

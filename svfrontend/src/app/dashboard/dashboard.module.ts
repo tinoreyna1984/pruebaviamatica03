@@ -4,6 +4,7 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { SharedModule } from '../shared/shared.module';
+import { DashboardRoutingModule } from './dashboard-routing.module';
 
 
 
@@ -13,6 +14,7 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
+    DashboardRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,

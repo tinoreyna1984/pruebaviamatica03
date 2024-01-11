@@ -17,9 +17,28 @@ export class TokenValuesService {
     return token;
   }
 
+  getUsername(): any{
+    const token: any = this.getToken();
+    return token.username;
+  }
+
   getRole(): any{
     const token: any = this.getToken();
     return token.role;
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMINISTRATOR';
+  }
+
+  getPermissions():any {
+    const token: any = this.getToken();
+    return token.permissions;
+  }
+
+  hasPermission(p: string): boolean {
+    const permissions = this.getPermissions();
+    return permissions.includes(p);
   }
 
   getRoutes(): any{
@@ -27,9 +46,11 @@ export class TokenValuesService {
     return token.routes;
   }
 
-  getUsername(): any{
+  getTokenLifetime(): any {
     const token: any = this.getToken();
-    return token.username;
+    const issuedAt = token.iat;
+    const expires = token.exp;
+    return [issuedAt, expires]; // fechas de acceso otorgado y de expiración
   }
 
 }

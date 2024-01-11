@@ -19,6 +19,7 @@ export class MainLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.links = this.tokenValuesService.getRoutes();
+    //console.log(this.links);
     this.userName = this.tokenValuesService.getUsername();
   }
 
