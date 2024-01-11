@@ -32,7 +32,24 @@ public class AuthenticationService {
                 authRequest.getUsername(), authRequest.getPassword()
         );
 
-        authenticationManager.authenticate(authToken);
+        try {
+            authenticationManager.authenticate(authToken);
+        } catch (AuthenticationException e) {
+            return GenericResponse
+                    .getResponse(403,
+                            "Error en las credenciales: " + e.getMessage(),
+                            null);
+        }catch (DataAccessException e) {
+            return GenericResponse
+                    .getResponse(500,
+                            "Error al dar acceso: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
+                            null);
+        }
 
         Optional<User> optionalUser = userRepository.findByUsername(authRequest.getUsername());
         if(optionalUser.isEmpty()){
@@ -50,25 +67,8 @@ public class AuthenticationService {
                             null);
         }
 
-        try{
-            String jwt = jwtService.generateToken(user, generateExtraClaims(user));
-            return GenericResponse.getResponse(200, "Se dio acceso al usuario", jwt);
-        }catch (DataAccessException e) {
-            return GenericResponse
-                    .getResponse(500,
-                            "Error al dar acceso: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
-                            null);
-        }catch (AuthenticationException e) {
-            return GenericResponse
-                    .getResponse(401,
-                            "Error en las credenciales: " + e.getMessage(),
-                            null);
-        } catch (Exception e){
-            return GenericResponse
-                    .getResponse(500,
-                            "Error inesperado: " + e.getMessage(),
-                            null);
-        }
+        String jwt = jwtService.generateToken(user, generateExtraClaims(user));
+        return GenericResponse.getResponse(200, "Se dio acceso al usuario", jwt);
 
     }
 

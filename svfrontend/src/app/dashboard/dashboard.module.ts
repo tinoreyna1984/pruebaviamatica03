@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { SharedModule } from '../shared/shared.module';
@@ -7,7 +8,9 @@ import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    DashboardPageComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -16,4 +19,4 @@ import { SharedModule } from '../shared/shared.module';
     SharedModule
   ]
 })
-export class UsersModule { }
+export class DashboardModule { }
