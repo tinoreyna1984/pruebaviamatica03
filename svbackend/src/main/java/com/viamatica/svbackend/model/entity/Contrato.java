@@ -1,6 +1,5 @@
 package com.viamatica.svbackend.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -40,7 +39,6 @@ public class Contrato {
     // cada contrato es para un servicio
     @ManyToOne
     @JoinColumn(name="servicio_id", referencedColumnName = "servicio_id")
-    //@JsonBackReference
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
@@ -49,7 +47,6 @@ public class Contrato {
     // cada contrato es de un cliente
     @ManyToOne
     @JoinColumn(name="cliente_id", referencedColumnName = "cliente_id")
-    //@JsonBackReference
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")

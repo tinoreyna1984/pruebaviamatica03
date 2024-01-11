@@ -37,7 +37,6 @@ public class Atencion {
     // cada atención proviene de un mismo cliente
     @ManyToOne
     @JoinColumn(name="cliente_id", referencedColumnName = "cliente_id")
-    //@JsonBackReference
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
