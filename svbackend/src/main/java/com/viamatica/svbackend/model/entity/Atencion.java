@@ -1,6 +1,8 @@
 package com.viamatica.svbackend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.viamatica.svbackend.util.enums.AttentionStatus;
 import com.viamatica.svbackend.util.enums.AttentionType;
 import jakarta.persistence.*;
@@ -35,7 +37,10 @@ public class Atencion {
     // cada atención proviene de un mismo cliente
     @ManyToOne
     @JoinColumn(name="cliente_id", referencedColumnName = "cliente_id")
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Cliente cliente;
 
     public void setDescripcion(){

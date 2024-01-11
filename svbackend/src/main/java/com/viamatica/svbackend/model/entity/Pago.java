@@ -1,6 +1,8 @@
 package com.viamatica.svbackend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,9 @@ public class Pago {
     // varios pagos pueden proceder del mismo cliente
     @ManyToOne
     @JoinColumn(name="cliente_id", referencedColumnName = "cliente_id")
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Cliente cliente;
 }

@@ -2,6 +2,8 @@ package com.viamatica.svbackend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.viamatica.svbackend.util.enums.ContractStatus;
 import com.viamatica.svbackend.util.enums.PaymentMethod;
 import jakarta.persistence.*;
@@ -38,12 +40,18 @@ public class Contrato {
     // cada contrato es para un servicio
     @ManyToOne
     @JoinColumn(name="servicio_id", referencedColumnName = "servicio_id")
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Servicio servicio;
 
     // cada contrato es de un cliente
     @ManyToOne
     @JoinColumn(name="cliente_id", referencedColumnName = "cliente_id")
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Cliente cliente;
 }
