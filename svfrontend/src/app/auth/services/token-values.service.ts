@@ -13,17 +13,22 @@ export class TokenValuesService {
 
   getToken(): any {
     const jwt: any = localStorage.getItem('jwt');
+    return jwt;
+  }
+
+  getDecodedToken(): any {
+    const jwt: any = this.getToken();
     const token: any = jwt_decode(jwt);
     return token;
   }
 
   getUsername(): any{
-    const token: any = this.getToken();
+    const token: any = this.getDecodedToken();
     return token.username;
   }
 
   getRole(): any{
-    const token: any = this.getToken();
+    const token: any = this.getDecodedToken();
     return token.role;
   }
 
@@ -32,7 +37,7 @@ export class TokenValuesService {
   }
 
   getPermissions():any {
-    const token: any = this.getToken();
+    const token: any = this.getDecodedToken();
     return token.permissions;
   }
 
@@ -42,15 +47,21 @@ export class TokenValuesService {
   }
 
   getRoutes(): any{
-    const token: any = this.getToken();
+    const token: any = this.getDecodedToken();
     return token.routes;
   }
 
   getTokenLifetime(): any {
-    const token: any = this.getToken();
+    const token: any = this.getDecodedToken();
     const issuedAt = token.iat;
     const expires = token.exp;
     return [issuedAt, expires]; // fechas de acceso otorgado y de expiración
+  }
+
+  headers():any {
+    const jwt: any = this.getToken();
+    const headers = { 'Authorization': 'Bearer ' + jwt };
+    return { headers };
   }
 
 }

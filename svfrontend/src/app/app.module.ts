@@ -22,7 +22,8 @@ import { SharedModule } from './shared/shared.module';
     MaterialModule,
     SharedModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
