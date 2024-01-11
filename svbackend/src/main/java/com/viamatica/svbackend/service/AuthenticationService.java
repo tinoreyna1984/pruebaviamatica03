@@ -28,6 +28,14 @@ public class AuthenticationService {
 
     public GenericResponse<?> login(AuthenticationRequest authRequest) {
 
+        Optional<User> optionalUser = userRepository.findByUsername(authRequest.getUsername());
+        if(optionalUser.isEmpty()){
+            return GenericResponse
+                    .getResponse(400,
+                            "No se encuentra el usuario.",
+                            null);
+        }
+
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 authRequest.getUsername(), authRequest.getPassword()
         );
@@ -37,7 +45,7 @@ public class AuthenticationService {
         } catch (AuthenticationException e) {
             return GenericResponse
                     .getResponse(403,
-                            "Error en las credenciales: " + e.getMessage(),
+                            "La contraseña es incorrecta.",
                             null);
         }catch (DataAccessException e) {
             return GenericResponse
@@ -51,15 +59,7 @@ public class AuthenticationService {
                             null);
         }
 
-        Optional<User> optionalUser = userRepository.findByUsername(authRequest.getUsername());
-        if(optionalUser.isEmpty()){
-            return GenericResponse
-                    .getResponse(400,
-                            "No se encuentra el usuario.",
-                            null);
-        }
         User user = optionalUser.get();
-
         if(user.getUserStatus() == UserStatus.NOT_APPROVED){
             return GenericResponse
                     .getResponse(403,
