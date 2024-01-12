@@ -26,6 +26,7 @@ export class AtencionesPageComponent implements OnInit {
     'attentionType',
     'descripcion',
     'attentionStatus',
+    'cliente',
     'modificar',
     'borrar',
   ];

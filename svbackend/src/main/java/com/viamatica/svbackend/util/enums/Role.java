@@ -48,7 +48,7 @@ public enum Role {
             ),
             Arrays.asList(
                     Route.HOME,
-                    Route.ATTENTIONS,
+                    //Route.ATTENTIONS, // es para el gestor
                     Route.CONTRACTS,
                     Route.CUSTOMERS
             )

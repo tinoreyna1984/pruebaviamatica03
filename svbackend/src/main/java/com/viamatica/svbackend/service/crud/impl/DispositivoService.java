@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings({"null"})
 public class DispositivoService implements GenericService<Dispositivo, DispositivoRequest> {
     @Autowired
     private DispositivoRepository dispositivoRepository;

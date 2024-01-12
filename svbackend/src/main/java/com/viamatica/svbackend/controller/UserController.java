@@ -21,6 +21,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api")
 @SecurityRequirement(name = "bearerAuth")
+@SuppressWarnings({"null"})
 public class UserController {
 
     @Autowired

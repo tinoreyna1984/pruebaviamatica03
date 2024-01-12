@@ -2,8 +2,6 @@ package com.viamatica.svbackend.util.helpers;
 
 import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.entity.User;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

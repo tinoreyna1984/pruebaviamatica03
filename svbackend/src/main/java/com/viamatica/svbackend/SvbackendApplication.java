@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 		type = SecuritySchemeType.HTTP,
 		in = SecuritySchemeIn.HEADER
 )
+@SuppressWarnings({"unused"})
 public class SvbackendApplication {
 
 	public static void main(String[] args) {

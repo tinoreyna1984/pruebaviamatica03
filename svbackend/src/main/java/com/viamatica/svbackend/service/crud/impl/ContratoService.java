@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings({"null"})
 public class ContratoService implements GenericService<Contrato, ContratoRequest> {
 
     @Autowired

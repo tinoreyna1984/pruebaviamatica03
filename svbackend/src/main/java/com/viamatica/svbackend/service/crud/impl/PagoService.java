@@ -7,7 +7,6 @@ import com.viamatica.svbackend.model.entity.Pago;
 import com.viamatica.svbackend.repository.ClienteRepository;
 import com.viamatica.svbackend.repository.PagoRepository;
 import com.viamatica.svbackend.service.crud.GenericService;
-import com.viamatica.svbackend.util.enums.Role;
 import com.viamatica.svbackend.util.helpers.HelperClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings({"null"})
 public class PagoService implements GenericService<Pago, PagoRequest> {
     @Autowired
     private PagoRepository pagoRepository;

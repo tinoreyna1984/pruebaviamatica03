@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings({"null"})
 public class UserService implements GenericService<User, UserRequest> {
 
     @Autowired

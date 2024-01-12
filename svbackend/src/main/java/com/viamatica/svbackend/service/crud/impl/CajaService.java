@@ -3,7 +3,6 @@ package com.viamatica.svbackend.service.crud.impl;
 import com.viamatica.svbackend.model.dto.request.CajaRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.Caja;
-import com.viamatica.svbackend.model.entity.Pago;
 import com.viamatica.svbackend.repository.CajaRepository;
 import com.viamatica.svbackend.service.crud.GenericService;
 import com.viamatica.svbackend.util.helpers.HelperClass;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings({"null"})
 public class CajaService implements GenericService<Caja, CajaRequest> {
 
     @Autowired

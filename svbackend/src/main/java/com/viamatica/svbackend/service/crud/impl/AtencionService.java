@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings({"null"})
 public class AtencionService implements GenericService<Atencion, AtencionRequest> {
 
     @Autowired
@@ -33,24 +34,26 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
     private final HelperClass helperClass = new HelperClass();
 
     @Override
-    public GenericResponse<?> get(Integer page, Integer size){
-        try{
+    public GenericResponse<?> get(Integer page, Integer size) {
+        try {
             if (page != null && size != null) {
                 // Si se proporcionan los parámetros de paginación, devuelve una lista paginada
                 Pageable pageable = PageRequest.of(page, size);
                 Page<Atencion> pageResult = atencionRepository.findAll(pageable);
                 return GenericResponse.getResponse(200, "Se encuentran las atenciones", pageResult);
             } else {
-                // Si no se proporcionan los parámetros de paginación, devuelve una lista completa
+                // Si no se proporcionan los parámetros de paginación, devuelve una lista
+                // completa
                 List<Atencion> users = atencionRepository.findAll();
                 return GenericResponse.getResponse(200, "Se encuentran las atenciones", users);
             }
-        } catch (DataAccessException e){
+        } catch (DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
-                            "Error al consultar atenciones: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            "Error al consultar atenciones: "
+                                    + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
-        } catch (Exception e){
+        } catch (Exception e) {
             return GenericResponse
                     .getResponse(500,
                             "Error inesperado: " + e.getMessage(),
@@ -59,22 +62,23 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
     }
 
     @Override
-    public GenericResponse<Atencion> getById(Long id){
+    public GenericResponse<Atencion> getById(Long id) {
         Atencion atencion;
-        Optional<Atencion> optionalAtencion  = atencionRepository.findById(id);
+        Optional<Atencion> optionalAtencion = atencionRepository.findById(id);
         try {
-            if(optionalAtencion.isEmpty())
+            if (optionalAtencion.isEmpty())
                 return GenericResponse
                         .getResponse(400,
                                 "No se encuentra la atención con ID " + id,
                                 null);
             atencion = optionalAtencion.get();
-        } catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
-                            "Error al buscar atención: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            "Error al buscar atención: "
+                                    + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
-        } catch (Exception e){
+        } catch (Exception e) {
             return GenericResponse
                     .getResponse(500,
                             "Error inesperado: " + e.getMessage(),
@@ -84,7 +88,7 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
     }
 
     @Override
-    public GenericResponse<?> save(AtencionRequest request, BindingResult result){
+    public GenericResponse<?> save(AtencionRequest request, BindingResult result) {
         Atencion atencionNueva = new Atencion();
 
         // proceso de validación
@@ -93,35 +97,39 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
             return GenericResponse.getResponse(400, "Error al crear atención", errors);
 
         // busca cliente y caja
-        Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
         Optional<Caja> optionalCaja = cajaRepository.findById(request.getCajaId());
-        if(optionalCliente.isEmpty())
-            return GenericResponse
-                    .getResponse(400,
-                            "No se encuentra el cliente con ID " + request.getClienteId(),
-                            null);
-        Cliente cliente = optionalCliente.get();
-        if(optionalCaja.isEmpty())
+        if (optionalCaja.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la caja con ID " + request.getCajaId(),
                             null);
         Caja caja = optionalCaja.get();
+        Cliente cliente = null;
+        if (request.getClienteId() != null) {
+            Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
+            if (optionalCliente.isEmpty())
+                return GenericResponse
+                        .getResponse(400,
+                                "No se encuentra el cliente con ID " + request.getClienteId(),
+                                null);
+            cliente = optionalCliente.get();
+        }
 
         atencionNueva.setAttentionType(request.getAttentionType());
         atencionNueva.setAttentionStatus(request.getAttentionStatus());
         atencionNueva.setDescripcion(request.getAttentionType().getDescription());
-        atencionNueva.setCliente(cliente);
         atencionNueva.setCaja(caja);
+        atencionNueva.setCliente(cliente);
 
         try {
             atencionNueva = atencionRepository.save(atencionNueva);
-        } catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
-                            "Error al crear atención: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            "Error al crear atención: "
+                                    + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
-        } catch (Exception e){
+        } catch (Exception e) {
             return GenericResponse
                     .getResponse(500,
                             "Error inesperado: " + e.getMessage(),
@@ -132,7 +140,7 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
     }
 
     @Override
-    public GenericResponse<?> update(AtencionRequest request, Long id, BindingResult result){
+    public GenericResponse<?> update(AtencionRequest request, Long id, BindingResult result) {
         // proceso de validación
         String errors = helperClass.validaRequest(result);
         if (!errors.isEmpty())
@@ -140,7 +148,7 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
 
         Optional<Atencion> optionalAtencion = atencionRepository.findById(id);
         Atencion atencionEditada = null;
-        if(optionalAtencion.isEmpty())
+        if (optionalAtencion.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la atención con ID " + id,
@@ -150,13 +158,13 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
         // busca cliente y caja
         Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
         Optional<Caja> optionalCaja = cajaRepository.findById(request.getCajaId());
-        if(optionalCliente.isEmpty())
+        if (optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
         Cliente cliente = optionalCliente.get();
-        if(optionalCaja.isEmpty())
+        if (optionalCaja.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la caja con ID " + request.getCajaId(),
@@ -171,12 +179,13 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
 
         try {
             atencionEditada = atencionRepository.save(atencionActual);
-        } catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
-                            "Error al actualizar atención: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            "Error al actualizar atención: "
+                                    + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
-        } catch (Exception e){
+        } catch (Exception e) {
             return GenericResponse
                     .getResponse(500,
                             "Error inesperado: " + e.getMessage(),
@@ -186,15 +195,16 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
     }
 
     @Override
-    public GenericResponse<?> delete(Long id){
+    public GenericResponse<?> delete(Long id) {
         try {
             atencionRepository.deleteById(id);
-        }catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             return GenericResponse
                     .getResponse(500,
-                            "Error al realizar la consulta en la base de datos: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            "Error al realizar la consulta en la base de datos: "
+                                    + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
                             null);
-        } catch (Exception e){
+        } catch (Exception e) {
             return GenericResponse
                     .getResponse(500,
                             "Error inesperado: " + e.getMessage(),

@@ -28,6 +28,15 @@ export class LoginPageComponent {
     if (this.loading) {
       return; // Evita múltiples solicitudes si ya se está cargando
     }
+
+    // Validar credenciales antes de consumir el servicio
+    const credenciales = this.form.value;
+    const {username, password} = credenciales;
+    if(!username || !password){
+      Swal.fire('Error', "Debes ingresar usuario y contraseña.", 'error' );
+        return;
+    }
+
     this.loading = true;
     try {
       const res: any = await this.authService.login(this.form.value);

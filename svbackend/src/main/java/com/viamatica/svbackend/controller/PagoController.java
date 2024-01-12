@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @SecurityRequirement(name = "bearerAuth")
+@SuppressWarnings({"null"})
 public class PagoController {
     @Autowired
     private PagoService pagoService;

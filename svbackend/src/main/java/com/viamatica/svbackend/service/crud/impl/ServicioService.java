@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings({"null"})
 public class ServicioService implements GenericService<Servicio, ServicioRequest> {
     @Autowired
     private ServicioRepository servicioRepository;
