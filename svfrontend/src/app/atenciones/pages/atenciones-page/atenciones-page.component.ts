@@ -34,7 +34,6 @@ export class AtencionesPageComponent implements OnInit {
     this.loading = true;
     this.atencionesService.listarAtenciones().subscribe({
       next: (res: any) => {
-        console.log(res.data);
         if (res.httpCode < 400) {
           this.dataSource = new MatTableDataSource<any>(res.data);
           this.dataSource.paginator = this.paginator;
