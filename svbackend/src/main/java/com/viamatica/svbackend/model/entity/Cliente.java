@@ -41,13 +41,13 @@ public class Cliente {
     @JsonIgnore
     private List<Pago> pagos;
 
-    // un cliente puede ser atendido varias veces
-    @OneToMany(mappedBy = "cliente", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    // un cliente tiene una atención
+    @OneToOne(mappedBy = "cliente")
     @JsonIgnore
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
-    private List<Atencion> atenciones;
+    private Atencion atencion;
 
     // un cliente puede hacer varios contratos
     @OneToMany(mappedBy = "cliente", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)

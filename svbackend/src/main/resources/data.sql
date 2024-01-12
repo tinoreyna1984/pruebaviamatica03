@@ -46,16 +46,10 @@ INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (8,3);
 INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (9,3);
 
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('AC0001', 'AC0001 - Contrato de servicio', 'FINALIZADO',1,1);
-INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('PS0001', 'PS0001 - Pago de servicios', 'FINALIZADO',1,1);
-INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('AC0001', 'AC0001 - Contrato de servicio', 'FINALIZADO',1,2);
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('PS0001', 'PS0001 - Pago de servicios', 'FINALIZADO',1,2);
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('AC0001', 'AC0001 - Contrato de servicio', 'FINALIZADO',2,3);
-INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('PS0001', 'PS0001 - Pago de servicios', 'FINALIZADO',2,3);
-INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('AC0001', 'AC0001 - Contrato de servicio', 'FINALIZADO',2,4);
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('PS0001', 'PS0001 - Pago de servicios', 'FINALIZADO',2,4);
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('AC0001', 'AC0001 - Contrato de servicio', 'FINALIZADO',3,5);
-INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('PS0001', 'PS0001 - Pago de servicios', 'FINALIZADO',3,5);
-INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('AC0001', 'AC0001 - Contrato de servicio', 'FINALIZADO',3,6);
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('PS0001', 'PS0001 - Pago de servicios', 'FINALIZADO',3,6);
 
 

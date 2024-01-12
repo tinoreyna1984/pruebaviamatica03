@@ -34,8 +34,8 @@ public class Atencion {
     @JsonBackReference
     private Caja caja;
 
-    // cada atención proviene de un mismo cliente
-    @ManyToOne
+    // una atención es efectuada a un mismo cliente
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="cliente_id", referencedColumnName = "cliente_id")
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
