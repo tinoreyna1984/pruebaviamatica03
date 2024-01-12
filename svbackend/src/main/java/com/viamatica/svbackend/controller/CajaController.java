@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -29,6 +30,7 @@ public class CajaController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(cajaService.get(page, size)
                 );
     }
@@ -39,6 +41,7 @@ public class CajaController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(cajaService.getById(id)
                 );
     }
@@ -50,6 +53,7 @@ public class CajaController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(cajaService.save(request, result)
                 );
     }
@@ -60,6 +64,7 @@ public class CajaController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(cajaService.update(request, id, result)
                 );
     }
@@ -70,6 +75,7 @@ public class CajaController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(cajaService.delete(id)
                 );
     }

@@ -34,6 +34,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(clienteService.get(page, size)
                 );
     }
@@ -44,6 +45,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(clienteService.getById(id)
                 );
     }
@@ -55,6 +57,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(clienteService.save(request, result)
                 );
     }
@@ -65,6 +68,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(clienteService.update(request, id, result)
                 );
     }
@@ -75,6 +79,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(clienteService.delete(id)
                 );
     }
@@ -85,6 +90,7 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(clienteService.cargarDesdeCSV(archivo)
                 );
     }

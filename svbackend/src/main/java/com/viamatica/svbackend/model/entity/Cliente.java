@@ -36,9 +36,6 @@ public class Cliente {
 
     // un cliente realiza varios pagos
     @OneToMany(mappedBy = "cliente", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
-    /*@JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")*/
     @JsonManagedReference
     private List<Pago> pagos;
 

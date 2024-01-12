@@ -1,10 +1,13 @@
 package com.viamatica.svbackend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.viamatica.svbackend.util.enums.ContractStatus;
 import com.viamatica.svbackend.util.enums.PaymentMethod;
+import com.viamatica.svbackend.util.serializers.ServicioSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +45,8 @@ public class Contrato {
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
+    @JsonSerialize(using = ServicioSerializer.class) // prueba
+    //@JsonBackReference
     private Servicio servicio;
 
     // cada contrato es de un cliente

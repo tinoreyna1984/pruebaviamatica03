@@ -2,12 +2,16 @@ package com.viamatica.svbackend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.viamatica.svbackend.util.serializers.DispositivoSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,6 +28,7 @@ public class Servicio {
     // un servicio tiene un dispositivo
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dispositivo_id", referencedColumnName = "dispositivo_id")
+    @JsonSerialize(using = DispositivoSerializer.class) // prueba
     private Dispositivo dispositivo;
 
     // un servicio tiene varios contratos
@@ -32,5 +37,6 @@ public class Servicio {
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
-    private List<Contrato> contratos;
+    //@JsonManagedReference
+    private Set<Contrato> contratos;
 }

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,7 @@ public class ServicioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(servicioService.get(page, size)
                 );
     }
@@ -40,6 +42,7 @@ public class ServicioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(servicioService.getById(id)
                 );
     }
@@ -51,6 +54,7 @@ public class ServicioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(servicioService.save(request, result)
                 );
     }
@@ -61,6 +65,7 @@ public class ServicioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(servicioService.update(request, id, result)
                 );
     }
@@ -71,6 +76,7 @@ public class ServicioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(servicioService.delete(id)
                 );
     }

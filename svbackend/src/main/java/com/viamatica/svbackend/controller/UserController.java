@@ -35,6 +35,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.get(page, size)
                 );
     }
@@ -45,6 +46,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.getById(id)
                 );
     }
@@ -55,6 +57,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.save(request, result)
                 );
     }
@@ -65,6 +68,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.update(request, id, result)
                 );
     }
@@ -75,6 +79,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.delete(id)
                 );
     }
@@ -85,6 +90,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.approve(id)
                 );
     }
@@ -95,6 +101,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.asignaCaja(request.getUserId(), request.getCajaId())
                 );
     }
@@ -105,6 +112,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.dashboard()
                 );
     }
@@ -115,6 +123,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.cargarDesdeCSV(archivo)
                 );
     }
