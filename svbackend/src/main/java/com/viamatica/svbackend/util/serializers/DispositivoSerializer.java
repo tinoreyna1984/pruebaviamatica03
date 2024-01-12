@@ -13,7 +13,6 @@ public class DispositivoSerializer extends JsonSerializer<Dispositivo> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", dispositivo.getId());
         jsonGenerator.writeStringField("nombre", dispositivo.getNombre());
-        // Puedes agregar más campos según sea necesario
         jsonGenerator.writeEndObject();
     }
 }

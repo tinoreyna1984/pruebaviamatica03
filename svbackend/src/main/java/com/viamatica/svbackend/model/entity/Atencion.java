@@ -3,8 +3,10 @@ package com.viamatica.svbackend.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.viamatica.svbackend.util.enums.AttentionStatus;
 import com.viamatica.svbackend.util.enums.AttentionType;
+import com.viamatica.svbackend.util.serializers.ClienteConPagoSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +42,7 @@ public class Atencion {
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
+    @JsonSerialize(using = ClienteConPagoSerializer.class)
     private Cliente cliente;
 
     public void setDescripcion(){
