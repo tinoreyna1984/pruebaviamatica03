@@ -1,5 +1,11 @@
 <h1>Módulo de usuarios</h1>
-
+<div class="d-grid d-md-block my-2">
+  <button type="button" class="btn btn-secondary">Agregar cliente</button>
+  <div class="input-group mt-1">
+    <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="carga-masiva-clientes" aria-label="Upload">
+    <button class="btn btn-secondary" type="button" id="carga-masiva-clientes">Carga masiva</button>
+  </div>
+</div>
 <div class="row d-flex align-baseline my-2">
   <div class="mat-elevation-z8 table-responsive">
     <table mat-table [dataSource]="dataSource" [hidden]="loading">
@@ -56,19 +62,19 @@
       <ng-container matColumnDef="aprobar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let user">
-          Aprobar
+          <button type="button" class="btn btn-info">Aprobar</button>
         </td>
       </ng-container>
       <ng-container matColumnDef="modificar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let user">
-          Modificar
+          <button type="button" class="btn btn-success">Modificar</button>
         </td>
       </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let user">
-          Borrar
+          <button type="button" class="btn btn-danger">Borrar</button>
         </td>
       </ng-container>
     </table>
