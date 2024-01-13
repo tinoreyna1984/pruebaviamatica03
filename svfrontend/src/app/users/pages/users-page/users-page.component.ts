@@ -15,7 +15,7 @@ export class UsersPageComponent implements OnInit {
   constructor(
     private usersService: UsersService,
     private tokenValuesService: TokenValuesService,
-    private helperService: HelperService,
+    private helperService: HelperService
   ) {}
 
   public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
@@ -40,16 +40,43 @@ export class UsersPageComponent implements OnInit {
     this.load();
   }
 
+  setDatasource(dataSource: any) {
+    this.dataSource = dataSource;
+    this.dataSource.paginator = this.paginator;
+  }
+
   load() {
     this.usersService.listarUsuarios().subscribe({
       next: (res: any) => {
         if (res.httpCode < 400) {
-          this.dataSource = new MatTableDataSource<any>(res.data);
-          this.dataSource.paginator = this.paginator;
+          this.setDatasource(new MatTableDataSource<any>(res.data));
         } else {
           Swal.fire('Error HTTP ' + res.httpCode, res.message, 'error');
         }
         if (this.loading) this.loading = false;
+      },
+      error: (e: any) => {
+        console.log(e);
+        Swal.fire(
+          'Error inesperado',
+          'Por favor, contacta con el administrador.',
+          'error'
+        );
+        if (this.loading) this.loading = false;
+      },
+    });
+  }
+
+  deleteItem(id: number) {
+    this.usersService.borrarUsuario(id).subscribe({
+      next: (res: any) => {
+        if (res.httpCode < 400) {
+          this.helperService.snackBarMsg(res.message, 3500);
+          this.load();
+        } else {
+          Swal.fire('Error ' + res.httpCode, res.message, 'error');
+          if (this.loading) this.loading = false;
+        }
       },
       error: (e: any) => {
         console.log(e);
@@ -72,26 +99,7 @@ export class UsersPageComponent implements OnInit {
     }).then((res) => {
       if (res.isConfirmed) {
         this.loading = true;
-        this.usersService.borrarUsuario(id).subscribe({
-          next: (res: any) => {
-            if (res.httpCode < 400) {
-              this.helperService.snackBarMsg(res.message, 3500);
-              this.load();
-            } else {
-              Swal.fire('Error ' + res.httpCode, res.message, 'error');
-              this.loading = false;
-            }
-          },
-          error: (e: any) => {
-            console.log(e);
-            Swal.fire(
-              'Error inesperado',
-              'Por favor, contacta con el administrador.',
-              'error'
-            );
-            if (this.loading) this.loading = false;
-          },
-        });
+        this.deleteItem(id);
       } else if (res.isDenied) {
         return;
       }

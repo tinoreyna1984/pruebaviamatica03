@@ -46,7 +46,7 @@
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let caja">
-          <button type="button" class="btn btn-danger">Borrar</button>
+          <button type="button" class="btn btn-danger" (click)="onDelete(caja.id)">Borrar</button>
         </td>
       </ng-container>
     </table>
