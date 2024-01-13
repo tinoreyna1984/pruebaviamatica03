@@ -33,7 +33,6 @@ public class ClienteConPagoSerializer extends JsonSerializer<Cliente> {
     }
 
     private String formatDate(Date date) {
-        // Aquí utilizas un formato SimpleDateFormat para formatear la fecha
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return dateFormat.format(date);
     }

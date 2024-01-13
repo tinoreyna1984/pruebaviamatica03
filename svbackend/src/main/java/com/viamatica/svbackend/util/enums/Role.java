@@ -19,9 +19,10 @@ public enum Role {
             ),
             Arrays.asList(
                     Route.HOME,
-                    Route.ATTENTIONS,
                     Route.CONTRACTS,
                     Route.CUSTOMERS,
+                    Route.CASH,
+                    Route.ATTENTIONS,
                     Route.USERS,
                     Route.DASHBOARD
             )
@@ -36,9 +37,10 @@ public enum Role {
             ),
             Arrays.asList(
                     Route.HOME,
-                    Route.ATTENTIONS,
                     Route.CONTRACTS,
                     Route.CUSTOMERS,
+                    Route.CASH,
+                    Route.ATTENTIONS,
                     Route.USERS
             )
     ),
@@ -48,9 +50,11 @@ public enum Role {
             ),
             Arrays.asList(
                     Route.HOME,
-                    //Route.ATTENTIONS, // es para el gestor
                     Route.CONTRACTS,
                     Route.CUSTOMERS
+                    //Route.CASH, // es para el gestor
+                    //Route.ATTENTIONS, // es para el gestor
+                    //Route.DASHBOARD // es para el administrador
             )
     ),;
 
