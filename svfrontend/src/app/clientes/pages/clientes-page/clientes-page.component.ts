@@ -97,6 +97,33 @@ export class ClientesPageComponent implements OnInit {
     });
   }
 
+  onLoadFile() {
+    const formData = new FormData();
+    if (this.archivo === null) return;
+    formData.append('archivo', this.archivo);
+    this.loading = true;
+    this.clientesService.cargarDesdeCSV(formData).subscribe({
+      next: (res: any) => {
+        if (res.httpCode < 400) {
+          this.helperService.snackBarMsg(res.message, 3500);
+          this.load();
+        } else {
+          Swal.fire('Error ' + res.httpCode, res.message, 'error');
+          if (this.loading) this.loading = false;
+        }
+      },
+      error: (e: any) => {
+        console.log(e);
+        Swal.fire(
+          'Error inesperado',
+          'Por favor, contacta con el administrador.',
+          'error'
+        );
+        if (this.loading) this.loading = false;
+      },
+    });
+  }
+
   onDelete(id: number) {
     Swal.fire({
       title: '¿Desea borrar el cliente?',

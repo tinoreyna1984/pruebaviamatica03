@@ -2,8 +2,17 @@
 <div class="d-grid d-md-block my-2">
   <button type="button" class="btn btn-secondary">Agregar cliente</button>
   <div class="input-group mt-1">
-    <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="carga-masiva-clientes" aria-label="Upload">
-    <button class="btn btn-secondary" type="button" id="carga-masiva-clientes">Carga masiva</button>
+    <input
+      type="file"
+      accept=".csv"
+      class="form-control"
+      id="carga-masiva-clientes"
+      aria-describedby="carga-masiva-clientes"
+      aria-label="Upload"
+    />
+    <button class="btn btn-secondary" type="button" id="carga-masiva-clientes">
+      Carga masiva
+    </button>
   </div>
 </div>
 <div class="row d-flex align-baseline my-2">
@@ -13,7 +22,9 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>#</th>
-        <td mat-cell *matCellDef="let cliente"> {{dataSource.filteredData.indexOf(cliente) + 1}} </td>
+        <td mat-cell *matCellDef="let cliente">
+          {{ dataSource.filteredData.indexOf(cliente) + 1 }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
@@ -64,7 +75,13 @@
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let cliente">
-          <button type="button" class="btn btn-danger" (click)="onDelete(cliente.id)">Borrar</button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="onDelete(cliente.id)"
+          >
+            Borrar
+          </button>
         </td>
       </ng-container>
     </table>
@@ -79,4 +96,3 @@
     </mat-paginator>
   </div>
 </div>
-

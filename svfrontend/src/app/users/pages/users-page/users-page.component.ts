@@ -20,6 +20,7 @@ export class UsersPageComponent implements OnInit {
 
   public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  archivo: any = null;
   loading: boolean = false;
   displayedColumns: string[] = [
     'id',
@@ -38,6 +39,10 @@ export class UsersPageComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.load();
+  }
+
+  onFileSelected(event: any): void {
+    this.archivo = event.target.files[0];
   }
 
   setDatasource(dataSource: any) {
@@ -69,6 +74,33 @@ export class UsersPageComponent implements OnInit {
 
   deleteItem(id: number) {
     this.usersService.borrarUsuario(id).subscribe({
+      next: (res: any) => {
+        if (res.httpCode < 400) {
+          this.helperService.snackBarMsg(res.message, 3500);
+          this.load();
+        } else {
+          Swal.fire('Error ' + res.httpCode, res.message, 'error');
+          if (this.loading) this.loading = false;
+        }
+      },
+      error: (e: any) => {
+        console.log(e);
+        Swal.fire(
+          'Error inesperado',
+          'Por favor, contacta con el administrador.',
+          'error'
+        );
+        if (this.loading) this.loading = false;
+      },
+    });
+  }
+
+  onLoadFile() {
+    const formData = new FormData();
+    if (this.archivo === null) return;
+    formData.append('archivo', this.archivo);
+    this.loading = true;
+    this.usersService.cargarDesdeCSV(formData).subscribe({
       next: (res: any) => {
         if (res.httpCode < 400) {
           this.helperService.snackBarMsg(res.message, 3500);
