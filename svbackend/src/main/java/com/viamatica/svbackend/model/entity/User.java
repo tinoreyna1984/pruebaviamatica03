@@ -70,7 +70,7 @@ public class User implements UserDetails {
     }
 
     // un usuario puede trabajar en varias cajas
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @JsonIgnore
     Set<Caja> cajas;
 
