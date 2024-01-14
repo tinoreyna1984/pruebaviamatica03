@@ -41,7 +41,7 @@ export class ContratosPageComponent {
     this.loading = true;
     this.load();
   }
-  
+
   setDatasource(dataSource: any) {
     this.dataSource = dataSource;
     this.dataSource.paginator = this.paginator;
@@ -92,28 +92,68 @@ export class ContratosPageComponent {
     });
   }
 
-  onAdd(){
-    const dialogRef = this.helperService.openDialog(AddComponent, this.dialog, 250, 250);
-
-    dialogRef.afterClosed().subscribe(
-      () => {
-        this.loading = true;
-        setTimeout(() => {}, 1800);
-        this.load();
-      }
-    );
+  viewServicio(data: any) {
+    let newData: any = data;
+    newData.dispositivo = JSON.parse(newData.dispositivo);
+    console.log(newData);
+    Swal.fire({
+      title: 'Servicio',
+      icon: 'info',
+      html: `<div>
+      <ul style="list-style: none;">
+      <li>${newData.descripcion}</li>
+      <li>Precio: ${newData.precio}</li>
+      <li>Dispositivo: ${newData.dispositivo.nombre}</li>
+      </ul>
+      </div>`,
+      confirmButtonText: 'Cerrar',
+    });
   }
 
-  onModify(data: any){
-    const dialogRef = this.helperService.openDialog(ModifyComponent, this.dialog, 250, 250, data);
+  viewCliente(data: any) {
+    Swal.fire({
+      title: 'Servicio',
+      icon: 'info',
+      html: `<div>
+      <ul style="list-style: none;">
+      <li>${data.name} ${data.lastName}</li>
+      <li>Fono: ${data.phone}</li>
+      <li>Email: ${data.email}</li>
+      </ul>
+      </div>`,
+      confirmButtonText: 'Cerrar',
+    });
+  }
 
-    dialogRef.afterClosed().subscribe(
-      () => {
-        this.loading = true;
-        setTimeout(() => {}, 1800);
-        this.load();
-      }
+  onAdd() {
+    const dialogRef = this.helperService.openDialog(
+      AddComponent,
+      this.dialog,
+      250,
+      250
     );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {}, 1800);
+      this.load();
+    });
+  }
+
+  onModify(data: any) {
+    const dialogRef = this.helperService.openDialog(
+      ModifyComponent,
+      this.dialog,
+      250,
+      250,
+      data
+    );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {}, 1800);
+      this.load();
+    });
   }
 
   onDelete(id: number) {

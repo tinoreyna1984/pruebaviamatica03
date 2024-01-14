@@ -30,7 +30,7 @@
       <ng-container matColumnDef="cliente">
         <th mat-header-cell *matHeaderCellDef>Cliente</th>
         <td mat-cell *matCellDef="let atencion">
-          <button type="button" class="btn btn-info">Ver cliente</button>
+          <button type="button" class="btn btn-info" (click)="viewCliente(atencion.cliente)">Ver cliente</button>
         </td>
       </ng-container>
       <ng-container matColumnDef="modificar">

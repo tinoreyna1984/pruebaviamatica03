@@ -90,6 +90,22 @@ export class AtencionesPageComponent implements OnInit {
     });
   }
 
+  viewCliente(data: any) {
+    console.log(data)
+    Swal.fire({
+      title: 'Servicio',
+      icon: 'info',
+      html: `<div>
+      <ul style="list-style: none;">
+      <li>${data.fullName}</li>
+      <li>Fono: ${data.phone}</li>
+      <li>Email: ${data.email}</li>
+      </ul>
+      </div>`,
+      confirmButtonText: 'Cerrar',
+    });
+  }
+
   onAdd(){
     const dialogRef = this.helperService.openDialog(AddComponent, this.dialog, 250, 250);
 
