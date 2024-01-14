@@ -71,7 +71,7 @@
       <ng-container matColumnDef="aprobar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let user">
-          <button type="button" class="btn btn-info">Aprobar</button>
+          <button *ngIf="this.isAdmin" type="button" class="btn btn-info" (click)="onApprove(user.id)">Aprobar</button>
         </td>
       </ng-container>
       <ng-container matColumnDef="modificar">

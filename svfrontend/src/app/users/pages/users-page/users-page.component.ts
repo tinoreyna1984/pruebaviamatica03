@@ -14,12 +14,15 @@ import { AddComponent } from '../../components/add/add.component';
   styleUrls: ['./users-page.component.css'],
 })
 export class UsersPageComponent implements OnInit {
+  isAdmin: boolean = false;
   constructor(
     private usersService: UsersService,
     private tokenValuesService: TokenValuesService,
     private helperService: HelperService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.isAdmin = this.tokenValuesService.isAdmin();
+  }
 
   public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -62,6 +65,29 @@ export class UsersPageComponent implements OnInit {
           Swal.fire('Error HTTP ' + res.httpCode, res.message, 'error');
         }
         if (this.loading) this.loading = false;
+      },
+      error: (e: any) => {
+        console.log(e);
+        Swal.fire(
+          'Error inesperado',
+          'Por favor, contacta con el administrador.',
+          'error'
+        );
+        if (this.loading) this.loading = false;
+      },
+    });
+  }
+
+  approve(id: number) {
+    this.usersService.aprobarUsuario(id).subscribe({
+      next: (res: any) => {
+        if (res.httpCode < 400) {
+          this.helperService.snackBarMsg(res.message, 3500);
+          this.load();
+        } else {
+          Swal.fire('Error ' + res.httpCode, res.message, 'error');
+          if (this.loading) this.loading = false;
+        }
       },
       error: (e: any) => {
         console.log(e);
@@ -137,9 +163,25 @@ export class UsersPageComponent implements OnInit {
     );
   }
 
+  onApprove(id: number){
+    Swal.fire({
+      title: '¿Deseas aprobar al usuario?',
+      showDenyButton: true,
+      confirmButtonText: 'Sí',
+      denyButtonText: 'No',
+    }).then((res) => {
+      if (res.isConfirmed) {
+        this.loading = true;
+        this.approve(id);
+      } else if (res.isDenied) {
+        return;
+      }
+    });
+  }
+
   onDelete(id: number) {
     Swal.fire({
-      title: '¿Desea borrar al usuario?',
+      title: '¿Deseas borrar al usuario?',
       showDenyButton: true,
       confirmButtonText: 'Sí',
       denyButtonText: 'No',

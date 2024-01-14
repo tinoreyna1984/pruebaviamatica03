@@ -74,4 +74,12 @@ export class UsersService {
       map((res: any) => res)
     );
   }
+  
+  aprobarUsuario(id: number){
+    return this.http.get<any>(`${this.baseUrl}/users/approve/${id}`, this.headers)
+    .pipe(
+      map((res: any) => res)
+    );
+  }
+
 }
