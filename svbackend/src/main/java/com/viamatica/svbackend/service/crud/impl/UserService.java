@@ -207,11 +207,14 @@ public class UserService implements GenericService<User, UserRequest> {
         Map<String, Object> dashboard = new HashMap<>();
         long approvedUsers = 0L;
         long operatorsCount = 0L;
+        long managersCount = 0L;
         try {
             approvedUsers = userRepository.approvedUsers();
             operatorsCount = userRepository.operatorsCount();
+            managersCount = userRepository.managersCount();
             dashboard.put("aprobados", approvedUsers);
             dashboard.put("cajeros", operatorsCount);
+            dashboard.put("gestores", managersCount);
             return GenericResponse.getResponse(200, "Dashboard", dashboard);
         }catch(DataAccessException e) {
             return GenericResponse

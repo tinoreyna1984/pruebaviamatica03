@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long approvedUsers();
     @Query(value = "SELECT operatorsCount()", nativeQuery = true)
     long operatorsCount();
+    @Query(value = "SELECT managersCount()", nativeQuery = true)
+    long managersCount();
 
     // asigna caja
     @Query(value = "select count(*) from usuario_caja where caja_id=:caja_id and usuario_id=:usuario_id", nativeQuery = true)
