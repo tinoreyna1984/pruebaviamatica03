@@ -23,18 +23,8 @@ public class Caja {
     private boolean active = true;
 
     // en una caja trabajan varios usuarios
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "usuario_caja",
-            joinColumns = @JoinColumn(name = "caja_id"),
-            inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-    Set<User> users;
-    @PreRemove // borra en cascada
-    private void removeUsersFromCaja() {
-        for (User user : users) {
-            user.getCajas().remove(this);
-        }
-        users.clear();
-    }
+    @OneToMany(mappedBy = "caja", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    Set<UserCaja> userCajas;
 
     // en una caja hay varias atenciones
     @OneToMany(mappedBy = "caja", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)

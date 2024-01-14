@@ -70,9 +70,9 @@ public class User implements UserDetails {
     }
 
     // un usuario puede trabajar en varias cajas
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JsonIgnore
-    Set<Caja> cajas;
+    Set<UserCaja> userCajas;
 
     @Override
     public boolean isAccountNonExpired() {

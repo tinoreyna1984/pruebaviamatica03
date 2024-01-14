@@ -38,12 +38,12 @@ INSERT INTO pagos(fecha_pago, cliente_id) VALUES ('2024-06-12',5);
 INSERT INTO pagos(fecha_pago, cliente_id) VALUES ('2024-06-12',6);
 INSERT INTO pagos(fecha_pago, cliente_id) VALUES ('2024-06-12',6);
 
-INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (4,1);
-INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (5,1);
-INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (6,2);
-INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (7,2);
-INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (8,3);
-INSERT INTO usuario_caja(usuario_id, caja_id) VALUES (9,3);
+INSERT INTO usuario_caja(usuario_id, caja_id, asignado_por) VALUES (4,1, 'Manager00');
+INSERT INTO usuario_caja(usuario_id, caja_id, asignado_por) VALUES (5,1, 'Manager00');
+INSERT INTO usuario_caja(usuario_id, caja_id, asignado_por) VALUES (6,2, 'Manager00');
+INSERT INTO usuario_caja(usuario_id, caja_id, asignado_por) VALUES (7,2, 'Manager00');
+INSERT INTO usuario_caja(usuario_id, caja_id, asignado_por) VALUES (8,3, 'Manager00');
+INSERT INTO usuario_caja(usuario_id, caja_id, asignado_por) VALUES (9,3, 'Manager00');
 
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('AC0001', 'AC0001 - Contrato de servicio', 'FINALIZADO',1,1);
 INSERT INTO atenciones(tipo_atencion, descripcion, estado_atencion, caja_id, cliente_id) VALUES ('PS0001', 'PS0001 - Pago de servicios', 'FINALIZADO',1,2);
