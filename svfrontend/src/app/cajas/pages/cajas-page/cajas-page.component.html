@@ -1,6 +1,8 @@
 <h1>Módulo de cajas</h1>
 <div class="d-grid d-md-block my-2">
-  <button type="button" class="btn btn-secondary" (click)="onAdd()">Agregar caja</button>
+  <button type="button" class="btn btn-secondary" (click)="onAdd()">
+    Agregar caja
+  </button>
 </div>
 <div class="row d-flex align-baseline my-2">
   <div class="mat-elevation-z8 table-responsive">
@@ -25,28 +27,46 @@
           {{ caja.active }}
         </td>
       </ng-container>
-      <ng-container matColumnDef="num_usuarios">
-        <th mat-header-cell *matHeaderCellDef>Num. usuarios</th>
-        <td mat-cell *matCellDef="let caja">
-          {{ caja.users.length }}
-        </td>
-      </ng-container>
       <ng-container matColumnDef="usuarios">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let caja">
-          <button type="button" class="btn btn-info">Ver usuarios</button>
+        <th mat-header-cell *matHeaderCellDef>Usuarios</th>
+        <td mat-cell *matCellDef="let caja" class="d-flex gap-1">
+          <button
+            type="button"
+            class="btn btn-info"
+            (click)="onViewUsers(caja.id, caja.users)"
+          >
+            Ver los {{ caja.users.length }} usuarios
+          </button>
+          <button
+            class="btn btn-secondary"
+            (click)="onAssignUsers(caja.id, caja.users)"
+          >
+            Asignar otro cajero
+          </button>
         </td>
       </ng-container>
       <ng-container matColumnDef="modificar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let caja">
-          <button type="button" class="btn btn-success" (click)="onModify(caja)">Modificar</button>
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="onModify(caja)"
+          >
+            Modificar
+          </button>
         </td>
       </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let caja">
-          <button type="button" class="btn btn-danger" (click)="onDelete(caja.id)">Borrar</button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="onDelete(caja.id)"
+          >
+            Borrar
+          </button>
         </td>
       </ng-container>
     </table>

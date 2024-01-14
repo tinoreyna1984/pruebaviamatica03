@@ -8,14 +8,15 @@ import { CajasService } from '../../services/cajas.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddComponent } from '../../components/add/add.component';
 import { ModifyComponent } from '../../components/modify/modify.component';
+import { CajasUsersComponent } from '../../components/cajas-users/cajas-users.component';
+import { AsignarUsersComponent } from '../../components/asignar-users/asignar-users.component';
 
 @Component({
   selector: 'app-cajas-page',
   templateUrl: './cajas-page.component.html',
-  styleUrls: ['./cajas-page.component.css']
+  styleUrls: ['./cajas-page.component.css'],
 })
 export class CajasPageComponent {
-
   constructor(
     private cajasService: CajasService,
     private tokenValuesService: TokenValuesService,
@@ -30,7 +31,6 @@ export class CajasPageComponent {
     'id',
     'descripcion',
     'active',
-    'num_usuarios',
     'usuarios',
     'modificar',
     'borrar',
@@ -91,28 +91,71 @@ export class CajasPageComponent {
     });
   }
 
-  onAdd(){
-    const dialogRef = this.helperService.openDialog(AddComponent, this.dialog, 250, 250);
-
-    dialogRef.afterClosed().subscribe(
-      () => {
-        this.loading = true;
-        setTimeout(() => {}, 1800);
-        this.load();
-      }
+  onAdd() {
+    const dialogRef = this.helperService.openDialog(
+      AddComponent,
+      this.dialog,
+      250,
+      250
     );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {
+        this.load();
+      }, 1800);
+    });
   }
 
-  onModify(data: any){
-    const dialogRef = this.helperService.openDialog(ModifyComponent, this.dialog, 250, 250, data);
-
-    dialogRef.afterClosed().subscribe(
-      () => {
-        this.loading = true;
-        setTimeout(() => {}, 1800);
-        this.load();
-      }
+  onViewUsers(id: number, users: any) {
+    const dialogRef = this.helperService.openDialog(
+      CajasUsersComponent,
+      this.dialog,
+      250,
+      250,
+      { id, users }
     );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {
+        this.load();
+      }, 1800);
+    });
+  }
+
+  onAssignUsers(id: number, users: any) {
+    const dialogRef = this.helperService.openDialog(
+      AsignarUsersComponent,
+      this.dialog,
+      250,
+      250,
+      { id, users }
+    );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {
+        this.load();
+      }, 1800);
+    });
+  }
+
+  onModify(data: any) {
+    const dialogRef = this.helperService.openDialog(
+      ModifyComponent,
+      this.dialog,
+      250,
+      250,
+      data
+    );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {
+        this.load();
+      }, 1800);
+    });
   }
 
   onDelete(id: number) {

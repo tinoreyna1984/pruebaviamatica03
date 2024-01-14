@@ -8,6 +8,8 @@ import { SharedModule } from '../shared/shared.module';
 import { CajasRoutingModule } from './cajas-routing.module';
 import { AddComponent } from './components/add/add.component';
 import { ModifyComponent } from './components/modify/modify.component';
+import { CajasUsersComponent } from './components/cajas-users/cajas-users.component';
+import { AsignarUsersComponent } from './components/asignar-users/asignar-users.component';
 
 
 
@@ -16,7 +18,9 @@ import { ModifyComponent } from './components/modify/modify.component';
     CajasLayoutComponent,
     CajasPageComponent,
     AddComponent,
-    ModifyComponent
+    ModifyComponent,
+    CajasUsersComponent,
+    AsignarUsersComponent
   ],
   imports: [
     CommonModule,

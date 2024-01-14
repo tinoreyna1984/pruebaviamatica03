@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Asignar a caja {{ this.cajaId }}</h1>
+<div mat-dialog-content>
+  <div class="mb-3">
+    <h4>Actualmente se asignaron {{ this.numUsuarios }}</h4>
+  </div>
+  <div class="mb-3">
+    <select class="form-select" aria-label="usuarios" [(ngModel)]="this.usuarioId">
+      <option
+        [value]="usuario.id"
+        *ngFor="let usuario of this.usuarios"
+      >
+        Usuario: {{ usuario.username }}
+      </option>
+    </select>
+  </div>
+  <div mat-dialog-actions class="d-flex gap-2 p-2">
+    <button
+      mat-button
+      mat-dialog-close
+      class="btn btn-success"
+      (click)="asignar(this.usuarioId*1, this.cajaId)"
+    >
+      Asignar
+    </button>
+    <button mat-button mat-dialog-close class="btn btn-secondary">
+      Cerrar
+    </button>
+  </div>
+</div>
