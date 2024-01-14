@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Agregar atención</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="add()">
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <input
+        type="text"
+        id="descripcion"
+        formControlName="descripcion"
+        class="form-control"
+        required
+      />
+    </div>
+    <div mat-dialog-actions class="d-flex gap-2 p-2">
+      <button type="submit" mat-button mat-dialog-close class="btn btn-success">
+        Agregar
+      </button>
+      <button mat-button mat-dialog-close class="btn btn-secondary">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

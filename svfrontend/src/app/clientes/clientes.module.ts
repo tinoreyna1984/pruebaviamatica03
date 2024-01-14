@@ -6,13 +6,17 @@ import { SharedModule } from '../shared/shared.module';
 import { ClientesLayoutComponent } from './layout/clientes-layout/clientes-layout.component';
 import { ClientesPageComponent } from './pages/clientes-page/clientes-page.component';
 import { ClientesRoutingModule } from './clientes-routing.module';
+import { AddComponent } from './components/add/add.component';
+import { ModifyComponent } from './components/modify/modify.component';
 
 
 
 @NgModule({
   declarations: [
     ClientesLayoutComponent,
-    ClientesPageComponent
+    ClientesPageComponent,
+    AddComponent,
+    ModifyComponent
   ],
   imports: [
     CommonModule,

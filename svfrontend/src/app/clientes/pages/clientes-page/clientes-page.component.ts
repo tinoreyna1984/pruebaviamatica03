@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenValuesService } from 'src/app/auth/services/token-values.service';
 import { ClientesService } from '../../services/clientes.service';
 import { HelperService } from 'src/app/shared/services/helper.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { AddComponent } from '../../components/add/add.component';
 
 @Component({
   selector: 'app-clientes-page',
@@ -18,7 +19,7 @@ export class ClientesPageComponent implements OnInit {
     private clientesService: ClientesService,
     private tokenValuesService: TokenValuesService,
     private helperService: HelperService,
-    private snackBar: MatSnackBar
+    private dialog: MatDialog
   ) {}
 
   public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
@@ -122,6 +123,18 @@ export class ClientesPageComponent implements OnInit {
         if (this.loading) this.loading = false;
       },
     });
+  }
+
+  onAdd(){
+    const dialogRef = this.helperService.openDialog(AddComponent, this.dialog, 250, 250);
+
+    dialogRef.afterClosed().subscribe(
+      () => {
+        this.loading = true;
+        setTimeout(() => {}, 1800);
+        this.load();
+      }
+    );
   }
 
   onDelete(id: number) {

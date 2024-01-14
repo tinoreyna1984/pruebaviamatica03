@@ -1,0 +1,62 @@
+<h1 mat-dialog-title>Agregar atención</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="add()">
+    <div class="mb-3">
+      <label for="attentionType" class="form-label">Tipo atención</label>
+      <select
+        id="attentionType"
+        class="form-select"
+        formControlName="attentionType"
+        required
+      >
+        <option selected value="AC0001">AC0001 - Contrato de servicio</option>
+        <option value="AC0002">AC0002 - Cambio de servicio</option>
+        <option value="AC0003">AC0003 - Cancelación de servicio</option>
+        <option value="PS0001">PS0001 - Pago de servicios</option>
+        <option value="PS0002">PS0002 - Cambio de forma de pago</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="attentionStatus" class="form-label">Estado</label>
+      <select
+        id="attentionStatus"
+        class="form-select"
+        formControlName="attentionStatus"
+        required
+      >
+        <option selected value="NUEVO">NUEVO</option>
+        <option value="EN_ATENCION">EN_ATENCION</option>
+        <option value="FINALIZADO">FINALIZADO</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="cajaId" class="form-label">Caja</label>
+      <select id="cajaId" class="form-select" formControlName="cajaId" required>
+        <option *ngFor="let caja of cajas" value="{{ caja.id }}">
+          {{ caja.descripcion }}
+        </option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="clienteId" class="form-label">Cliente</label>
+      <select
+        id="clienteId"
+        class="form-select"
+        formControlName="clienteId"
+        required
+      >
+        <option *ngFor="let cliente of clientes" value="{{ cliente.id }}">
+          {{ cliente.name }} {{ cliente.lastName }}
+        </option>
+      </select>
+    </div>
+    <div mat-dialog-actions class="d-flex gap-2 p-2">
+      <button type="submit" mat-button mat-dialog-close class="btn btn-success">
+        Agregar
+      </button>
+      <button mat-button mat-dialog-close class="btn btn-secondary">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

@@ -6,13 +6,17 @@ import { SharedModule } from '../shared/shared.module';
 import { ContratosLayoutComponent } from './layout/contratos-layout/contratos-layout.component';
 import { ContratosPageComponent } from './pages/contratos-page/contratos-page.component';
 import { ContratosRoutingModule } from './contratos-routing.module';
+import { AddComponent } from './components/add/add.component';
+import { ModifyComponent } from './components/modify/modify.component';
 
 
 
 @NgModule({
   declarations: [
     ContratosLayoutComponent,
-    ContratosPageComponent
+    ContratosPageComponent,
+    AddComponent,
+    ModifyComponent
   ],
   imports: [
     CommonModule,

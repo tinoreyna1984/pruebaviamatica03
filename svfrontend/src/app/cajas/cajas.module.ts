@@ -6,13 +6,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { SharedModule } from '../shared/shared.module';
 import { CajasRoutingModule } from './cajas-routing.module';
+import { AddComponent } from './components/add/add.component';
+import { ModifyComponent } from './components/modify/modify.component';
 
 
 
 @NgModule({
   declarations: [
     CajasLayoutComponent,
-    CajasPageComponent
+    CajasPageComponent,
+    AddComponent,
+    ModifyComponent
   ],
   imports: [
     CommonModule,

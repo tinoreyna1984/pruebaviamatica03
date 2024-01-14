@@ -6,13 +6,17 @@ import { SharedModule } from '../shared/shared.module';
 import { AtencionesLayoutComponent } from './layout/atenciones-layout/atenciones-layout.component';
 import { AtencionesPageComponent } from './pages/atenciones-page/atenciones-page.component';
 import { AtencionesRoutingModule } from './atenciones-routing.module';
+import { AddComponent } from './components/add/add.component';
+import { ModifyComponent } from './components/modify/modify.component';
 
 
 
 @NgModule({
   declarations: [
     AtencionesLayoutComponent,
-    AtencionesPageComponent
+    AtencionesPageComponent,
+    AddComponent,
+    ModifyComponent
   ],
   imports: [
     CommonModule,
