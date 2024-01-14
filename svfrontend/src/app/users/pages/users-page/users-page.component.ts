@@ -7,6 +7,7 @@ import { UsersService } from '../../services/users.service';
 import { HelperService } from 'src/app/shared/services/helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddComponent } from '../../components/add/add.component';
+import { ModifyComponent } from '../../components/modify/modify.component';
 
 @Component({
   selector: 'app-users-page',
@@ -177,6 +178,18 @@ export class UsersPageComponent implements OnInit {
         return;
       }
     });
+  }
+
+  onModify(data: any){
+    const dialogRef = this.helperService.openDialog(ModifyComponent, this.dialog, 250, 250, data);
+
+    dialogRef.afterClosed().subscribe(
+      () => {
+        this.loading = true;
+        setTimeout(() => {}, 1800);
+        this.load();
+      }
+    );
   }
 
   onDelete(id: number) {

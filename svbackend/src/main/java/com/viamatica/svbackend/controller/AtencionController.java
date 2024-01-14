@@ -61,7 +61,7 @@ public class AtencionController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER','ROLE_USER')")
-    @PutMapping("/atenciones/{id}")
+    @PatchMapping("/atenciones/{id}")
     public ResponseEntity<GenericResponse<?>> editarAtencion(@Valid @RequestBody AtencionRequest request, @PathVariable Long id, BindingResult result){
         return ResponseEntity
                 .status(HttpStatus.OK)

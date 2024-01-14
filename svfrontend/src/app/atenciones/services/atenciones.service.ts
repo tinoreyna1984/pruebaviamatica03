@@ -41,7 +41,7 @@ export class AtencionesService {
   }
 
   editarAtencion(id: number, req: any){
-    return this.http.put<any>(`${this.baseUrl}/atenciones/${id}`, req, this.headers)
+    return this.http.patch<any>(`${this.baseUrl}/atenciones/${id}`, req, this.headers)
     .pipe(
       map((response: any) => response)
     );

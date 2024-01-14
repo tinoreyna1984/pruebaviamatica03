@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { AddComponent } from '../../components/add/add.component';
+import { ModifyComponent } from '../../components/modify/modify.component';
 
 @Component({
   selector: 'app-clientes-page',
@@ -127,6 +128,18 @@ export class ClientesPageComponent implements OnInit {
 
   onAdd(){
     const dialogRef = this.helperService.openDialog(AddComponent, this.dialog, 250, 250);
+
+    dialogRef.afterClosed().subscribe(
+      () => {
+        this.loading = true;
+        setTimeout(() => {}, 1800);
+        this.load();
+      }
+    );
+  }
+
+  onModify(data: any){
+    const dialogRef = this.helperService.openDialog(ModifyComponent, this.dialog, 250, 250, data);
 
     dialogRef.afterClosed().subscribe(
       () => {

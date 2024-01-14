@@ -1,1 +1,71 @@
-<p>modify works!</p>
+<h1 mat-dialog-title>Modificar contrato</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="modify()">
+    <div class="mb-3">
+      <label for="fechaInicioContrato" class="form-label">Fecha inicio</label>
+      <input
+        type="datetime-local"
+        id="fechaInicioContrato"
+        formControlName="fechaInicioContrato"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="fechaFinContrato" class="form-label">Fecha fin</label>
+      <input
+        type="datetime-local"
+        id="fechaFinContrato"
+        formControlName="fechaFinContrato"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="paymentMethod" class="form-label">Forma de pago</label>
+      <select
+        id="paymentMethod"
+        class="form-select"
+        formControlName="paymentMethod"
+        required
+      >
+        <option selected value="EFECTIVO">EFECTIVO</option>
+        <option value="TARJETA_DE_PAGO">TARJETA_DE_PAGO</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="servicioId" class="form-label">Servicio</label>
+      <select
+        id="servicioId"
+        class="form-select"
+        formControlName="servicioId"
+        required
+      >
+        <option *ngFor="let servicio of servicios" value="{{ servicio.id }}">
+          {{ servicio.descripcion }} USD{{ servicio.precio | currency : "USD" }}
+        </option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="clienteId" class="form-label">Cliente</label>
+      <select
+        id="clienteId"
+        class="form-select"
+        formControlName="clienteId"
+        required
+      >
+        <option *ngFor="let cliente of clientes" value="{{ cliente.id }}">
+          {{ cliente.name }} {{ cliente.lastName }}
+        </option>
+      </select>
+    </div>
+    <div mat-dialog-actions class="d-flex gap-2 p-2">
+      <button type="submit" mat-button mat-dialog-close class="btn btn-success">
+        Modificar
+      </button>
+      <button mat-button mat-dialog-close class="btn btn-secondary">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

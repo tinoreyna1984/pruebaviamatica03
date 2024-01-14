@@ -1,1 +1,30 @@
-<p>modify works!</p>
+<h1 mat-dialog-title>Modificar caja</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="modify()">
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <input
+        type="text"
+        id="descripcion"
+        formControlName="descripcion"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="active" class="form-label">Activo</label>
+      <select id="active" class="form-select" formControlName="active" required>
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    <div mat-dialog-actions class="d-flex gap-2 p-2">
+      <button type="submit" mat-button mat-dialog-close class="btn btn-success">
+        Modificar
+      </button>
+      <button mat-button mat-dialog-close class="btn btn-secondary">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

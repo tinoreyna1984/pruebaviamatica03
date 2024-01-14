@@ -36,7 +36,7 @@
       <ng-container matColumnDef="modificar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let atencion">
-          <button type="button" class="btn btn-success">Modificar</button>
+          <button type="button" class="btn btn-success" (click)="onModify(atencion)">Modificar</button>
         </td>
       </ng-container>
       <ng-container matColumnDef="borrar">

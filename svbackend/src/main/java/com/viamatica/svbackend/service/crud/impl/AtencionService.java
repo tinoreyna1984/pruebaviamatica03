@@ -157,25 +157,25 @@ public class AtencionService implements GenericService<Atencion, AtencionRequest
 
         // busca cliente y caja
         Optional<Cliente> optionalCliente = clienteRepository.findById(request.getClienteId());
-        Optional<Caja> optionalCaja = cajaRepository.findById(request.getCajaId());
+        //Optional<Caja> optionalCaja = cajaRepository.findById(request.getCajaId());
         if (optionalCliente.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra el cliente con ID " + request.getClienteId(),
                             null);
         Cliente cliente = optionalCliente.get();
-        if (optionalCaja.isEmpty())
+        /* if (optionalCaja.isEmpty())
             return GenericResponse
                     .getResponse(400,
                             "No se encuentra la caja con ID " + request.getCajaId(),
                             null);
-        Caja caja = optionalCaja.get();
+        Caja caja = optionalCaja.get(); */
 
         atencionActual.setAttentionType(request.getAttentionType());
         atencionActual.setAttentionStatus(request.getAttentionStatus());
         atencionActual.setDescripcion(request.getAttentionType().getDescription());
         atencionActual.setCliente(cliente);
-        atencionActual.setCaja(caja);
+        //atencionActual.setCaja(caja);
 
         try {
             atencionEditada = atencionRepository.save(atencionActual);
