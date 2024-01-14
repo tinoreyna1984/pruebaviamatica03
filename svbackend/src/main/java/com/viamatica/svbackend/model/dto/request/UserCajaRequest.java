@@ -8,4 +8,5 @@ import lombok.Setter;
 public class UserCajaRequest {
     private Long userId;
     private Long cajaId;
+    private String assignedBy;
 }

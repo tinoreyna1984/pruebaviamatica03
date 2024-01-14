@@ -103,7 +103,7 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .header("custom-status", "OK")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(userService.asignaCaja(request.getUserId(), request.getCajaId())
+                .body(userService.asignaCaja(request)
                 );
     }
 

@@ -3,10 +3,12 @@ package com.viamatica.svbackend.service.crud.impl;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import com.viamatica.svbackend.model.dto.request.UserCajaRequest;
 import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.Caja;
 import com.viamatica.svbackend.model.entity.User;
+import com.viamatica.svbackend.model.entity.UserCaja;
 import com.viamatica.svbackend.repository.CajaRepository;
 import com.viamatica.svbackend.repository.UserRepository;
 import com.viamatica.svbackend.service.crud.GenericService;
@@ -247,23 +249,23 @@ public class UserService implements GenericService<User, UserRequest> {
         return GenericResponse.getResponse(200, "Se aprueba al usuario", null);
     }
 
-    public GenericResponse<?> asignaCaja(Long usuarioId, Long cajaId){
-        User user = userRepository.findById(usuarioId).orElseThrow();
-        Caja caja = cajaRepository.findById(cajaId).orElseThrow();
-        if(userRepository.limiteCajaPorUsuario(usuarioId) >= 2){
+    public GenericResponse<?> asignaCaja(UserCajaRequest request){
+        User user = userRepository.findById(request.getUserId()).orElseThrow();
+        Caja caja = cajaRepository.findById(request.getCajaId()).orElseThrow();
+        if(userRepository.limiteCajaPorUsuario(request.getUserId()) >= 2){
             return GenericResponse
                     .getResponse(400,
                             "El usuario " + user.getUsername() + " no debe tener más de 2 cajas asignadas.",
                             null);
         }
-        if(userRepository.verificaUsuariosCajas(usuarioId, cajaId) > 0L){
+        if(userRepository.verificaUsuariosCajas(request.getUserId(), request.getCajaId()) > 0L){
             return GenericResponse
                     .getResponse(400,
                             "El usuario " + user.getUsername() + " ya tiene asignada la caja " + caja.getDescripcion(),
                             null);
         }
         try {
-            userRepository.agregaUsuarioACaja(usuarioId, cajaId);
+            userRepository.agregaUsuarioACaja(request.getUserId(), request.getCajaId(), request.getAssignedBy());
         }catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,

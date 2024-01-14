@@ -31,6 +31,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long limiteCajaPorUsuario(@Param(value = "usuario_id") Long usuario_id);
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO usuario_caja VALUES(:caja_id, :usuario_id)", nativeQuery = true)
-    void agregaUsuarioACaja(@Param(value = "usuario_id") Long usuario_id, @Param(value = "caja_id") Long caja_id);
+    @Query(value = "INSERT INTO usuario_caja(usuario_id, caja_id, asignado_por) VALUES(:usuario_id, :caja_id, :asignado_por)", nativeQuery = true)
+    void agregaUsuarioACaja(
+        @Param(value = "usuario_id") Long usuario_id, 
+        @Param(value = "caja_id") Long caja_id, 
+        @Param(value = "asignado_por") String asignado_por
+    );
 }

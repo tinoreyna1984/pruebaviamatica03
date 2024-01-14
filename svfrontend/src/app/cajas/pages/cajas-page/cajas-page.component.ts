@@ -37,7 +37,6 @@ export class CajasPageComponent {
   ];
 
   ngOnInit(): void {
-    this.loading = true;
     this.load();
   }
 
@@ -47,9 +46,11 @@ export class CajasPageComponent {
   }
 
   load() {
+    this.loading = true;
     this.cajasService.listarCajas().subscribe({
       next: (res: any) => {
         if (res.httpCode < 400) {
+          //console.log(res.data)
           this.setDatasource(new MatTableDataSource<any>(res.data));
         } else {
           Swal.fire('Error HTTP ' + res.httpCode, res.message, 'error');

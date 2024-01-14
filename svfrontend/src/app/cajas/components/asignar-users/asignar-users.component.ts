@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TokenValuesService } from 'src/app/auth/services/token-values.service';
 import { UsersService } from 'src/app/users/services/users.service';
 import Swal from 'sweetalert2';
 
@@ -15,7 +16,8 @@ export class AsignarUsersComponent implements OnInit {
   usuarios: any = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private tokenValuesService: TokenValuesService,
   ) {
     this.cajaId = this.data.id;
     this.numUsuarios = this.data.users.length;
@@ -29,7 +31,6 @@ export class AsignarUsersComponent implements OnInit {
       next: (res: any) => {
         if (res.httpCode < 400) {
           this.usuarios = res.data.filter((u: any) => u.role === 'USER');
-          console.log(this.usuarios);
         } else {
           Swal.fire('Error HTTP ' + res.httpCode, res.message, 'error');
         }
@@ -46,9 +47,9 @@ export class AsignarUsersComponent implements OnInit {
   }
 
   asignar(userId: number, cajaId: number) {
+    const assignedBy = this.tokenValuesService.getUsername();
     if(!userId) return;
-    console.log({ userId, cajaId });
-    this.usersService.asignarUsuarioACaja({ userId, cajaId }).subscribe({
+    this.usersService.asignarUsuarioACaja({ userId, cajaId, assignedBy }).subscribe({
       next: (res: any) => {
         if (res.httpCode < 400) {
           this.loadUsers();

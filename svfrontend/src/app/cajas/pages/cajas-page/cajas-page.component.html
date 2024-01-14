@@ -33,13 +33,13 @@
           <button
             type="button"
             class="btn btn-info"
-            (click)="onViewUsers(caja.id, caja.users)"
+            (click)="onViewUsers(caja.id, caja.userCajas)"
           >
-            Ver los {{ caja.users.length }} usuarios
+            Ver los {{ caja.userCajas.length }} usuarios
           </button>
           <button
             class="btn btn-secondary"
-            (click)="onAssignUsers(caja.id, caja.users)"
+            (click)="onAssignUsers(caja.id, caja.userCajas)"
           >
             Asignar otro cajero
           </button>
