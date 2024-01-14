@@ -39,7 +39,7 @@ export class AtencionesPageComponent implements OnInit {
     this.loading = true;
     this.load();
   }
-  
+
   setDatasource(dataSource: any) {
     this.dataSource = dataSource;
     this.dataSource.paginator = this.paginator;
@@ -91,7 +91,7 @@ export class AtencionesPageComponent implements OnInit {
   }
 
   viewCliente(data: any) {
-    console.log(data)
+    console.log(data);
     Swal.fire({
       title: 'Servicio',
       icon: 'info',
@@ -106,28 +106,37 @@ export class AtencionesPageComponent implements OnInit {
     });
   }
 
-  onAdd(){
-    const dialogRef = this.helperService.openDialog(AddComponent, this.dialog, 250, 250);
-
-    dialogRef.afterClosed().subscribe(
-      () => {
-        this.loading = true;
-        setTimeout(() => {}, 1800);
-        this.load();
-      }
+  onAdd() {
+    const dialogRef = this.helperService.openDialog(
+      AddComponent,
+      this.dialog,
+      250,
+      250
     );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {
+        this.load();
+      }, 1800);
+    });
   }
 
-  onModify(data: any){
-    const dialogRef = this.helperService.openDialog(ModifyComponent, this.dialog, 250, 250, data);
-
-    dialogRef.afterClosed().subscribe(
-      () => {
-        this.loading = true;
-        setTimeout(() => {}, 1800);
-        this.load();
-      }
+  onModify(data: any) {
+    const dialogRef = this.helperService.openDialog(
+      ModifyComponent,
+      this.dialog,
+      250,
+      250,
+      data
     );
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loading = true;
+      setTimeout(() => {
+        this.load();
+      }, 1800);
+    });
   }
 
   onDelete(id: number) {

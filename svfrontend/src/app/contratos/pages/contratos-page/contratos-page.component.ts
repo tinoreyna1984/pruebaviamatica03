@@ -135,8 +135,9 @@ export class ContratosPageComponent {
 
     dialogRef.afterClosed().subscribe(() => {
       this.loading = true;
-      setTimeout(() => {}, 1800);
-      this.load();
+      setTimeout(() => {
+        this.load();
+      }, 1800);
     });
   }
 
@@ -151,8 +152,9 @@ export class ContratosPageComponent {
 
     dialogRef.afterClosed().subscribe(() => {
       this.loading = true;
-      setTimeout(() => {}, 1800);
-      this.load();
+      setTimeout(() => {
+        this.load();
+      }, 1800);
     });
   }
 
