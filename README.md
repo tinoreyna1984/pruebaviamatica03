@@ -9,15 +9,7 @@
 * Lombok
 * Spring Boot Dev Tools
 * PostgreSQL Driver
-* JSON Schema:
-```xml
-		<!--JSON Schema-->
-		<dependency>
-			<groupId>com.networknt</groupId>
-			<artifactId>json-schema-validator</artifactId>
-			<version>1.0.72</version>
-		</dependency>
-```
+* Spring Validation
 * JWT:
 ```xml
 		<!-- JWT -->
@@ -72,6 +64,24 @@
 			<version>5.6</version>
 		</dependency>
 ```
+* ObjectMapper
+```xml
+		<!--ObjectMapper-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.15.0</version>
+		</dependency>
+```
+* Mail
+```xml
+		<!--Mail-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+```
+
 
 ### Ejecución
 * Desde el programa principal AcademiaApplication.java (con IntelliJ IDEA u otro IDE).
@@ -80,7 +90,7 @@
 * Después de levantar el servicio, ejecutar en PostgreSQL los scripts totalActiveUsers.sql y totalLockedUsers.sql (requerido para el dashboard).
 
 ### Endpoints:
-Usar Swagger: http://localhost:4009/swagger-ui/index.html
+Usar Swagger: http://localhost:4011/swagger-ui/index.html
 
 
 ## Frontend
@@ -94,38 +104,18 @@ Usar Swagger: http://localhost:4009/swagger-ui/index.html
 
 ## Docker
 
-### Creación independiente de contenedores
-* Backend: desde la carpeta backend, ejecutar:
-```bash
-docker-compose up
-```
-* Frontend:  desde la carpeta backend, ejecutar:
-```bash
-docker-compose up
-```
-* Asegurarse de que ambos servicios estén levantados
-* Acceder al esquema del backend y ejecutar los scripts totalActiveUsers.sql y totalLockedUsers.sql (requerido para el dashboard):
-```bash
-docker ps -a
-docker exec -it <id de contenedor de postgres creado> bash
-psql -d pruebaviamatica02 -U postgres
-# Copiar y pegar los scripts de ambos archivos y ejecutarlos
-```
-* Desde el navegador, ir a http://localhost:4200
-* También funciona Swagger en la misma ruta señalada líneas arriba
-
 ### Creación desde raíz
 * Ir a la raíz del proyecto y ejecutar:
 ```bash
 docker-compose up
 ```
 * Asegurarse de que ambos servicios estén levantados
-* Acceder al esquema del backend y ejecutar los scripts totalActiveUsers.sql y totalLockedUsers.sql (requerido para el dashboard):
+* Acceder al esquema del backend y ejecutar los scripts approvedUsers.sql, managersCount.sql y operatorsCount.sql (requerido para el dashboard):
 ```bash
 docker ps -a
 docker exec -it <id de contenedor de postgres creado> bash
 psql -d pruebaviamatica02 -U postgres
-# Copiar y pegar los scripts de ambos archivos y ejecutarlos
+# Copiar y pegar los scripts SQL contenidos en archivos y ejecutarlos
 ```
 * Desde el navegador, ir a http://localhost:4200
 * También funciona Swagger en la misma ruta señalada líneas arriba
