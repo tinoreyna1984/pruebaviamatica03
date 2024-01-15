@@ -25,6 +25,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long managersCount();
 
     // asigna caja
+    @Query(value = "select count(*) from usuario_caja where asignado_por=:asignado_por", nativeQuery = true)
+    long asignadoPor(@Param(value = "asignado_por") String asignado_por);
     @Query(value = "select count(*) from usuario_caja where caja_id=:caja_id and usuario_id=:usuario_id", nativeQuery = true)
     long verificaUsuariosCajas(@Param(value = "usuario_id") Long usuario_id, @Param(value = "caja_id") Long caja_id);
     @Query(value = "select count(*) from usuario_caja where usuario_id=:usuario_id", nativeQuery = true)

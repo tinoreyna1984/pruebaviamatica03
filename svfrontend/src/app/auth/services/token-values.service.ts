@@ -36,6 +36,10 @@ export class TokenValuesService {
     return this.getRole() === 'ADMINISTRATOR';
   }
 
+  isManager(): boolean {
+    return this.getRole() === 'MANAGER';
+  }
+
   getPermissions():any {
     const token: any = this.getDecodedToken();
     return token.permissions;

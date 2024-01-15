@@ -119,6 +119,17 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
+    @GetMapping("/users/asignado-por/{asignadoPor}")
+    public ResponseEntity<GenericResponse<?>> asignadoPor(@PathVariable String asignadoPor){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("custom-status", "OK")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(userService.asignadoPor(asignadoPor)
+                );
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR','ROLE_MANAGER')")
     @PostMapping(value = "/users/csv", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<GenericResponse<?>> cargarDesdeCSV(@RequestPart(value = "archivo") MultipartFile archivo) throws IOException {
         return ResponseEntity

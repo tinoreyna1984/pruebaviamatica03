@@ -82,4 +82,11 @@ export class UsersService {
     );
   }
 
+  asignadoPor(manager: string){
+    return this.http.get<any>(`${this.baseUrl}/users/asignado-por/${manager}`, this.headers)
+    .pipe(
+      map((res: any) => res)
+    );
+  }
+
 }

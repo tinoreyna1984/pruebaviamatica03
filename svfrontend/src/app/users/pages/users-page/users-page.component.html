@@ -9,8 +9,9 @@
       id="carga-masiva-clientes"
       aria-describedby="carga-masiva-clientes"
       aria-label="Upload"
+      (change)="onFileSelected($event)"
     />
-    <button class="btn btn-secondary" type="button" id="carga-masiva-clientes">
+    <button class="btn btn-secondary" type="button" id="carga-masiva-clientes" (click)="onLoadFile()">
       Carga masiva
     </button>
   </div>

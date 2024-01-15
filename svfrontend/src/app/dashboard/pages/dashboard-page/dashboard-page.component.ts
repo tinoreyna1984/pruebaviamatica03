@@ -54,7 +54,6 @@ export class DashboardPageComponent implements OnInit {
     this.cajasService.listarCajas().subscribe({
       next: (res: any) => {
         if (res.httpCode < 400) {
-          console.log(res.data);
           this.cajas = res.data;
         } else {
           Swal.fire('Error ' + res.httpCode, res.message, 'error');

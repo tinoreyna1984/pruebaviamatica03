@@ -20,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,6 +151,7 @@ public class ContratoService implements GenericService<Contrato, ContratoRequest
 
         Optional<Contrato> optionalContratoActual = contratoRepository.findById(id);
         Contrato contratoEditado = null;
+        Contrato contratoSustitutorio = new Contrato(); // el que reemplazará al contrato actual
         if(optionalContratoActual.isEmpty())
             return GenericResponse
                     .getResponse(400,
@@ -178,8 +182,24 @@ public class ContratoService implements GenericService<Contrato, ContratoRequest
         contratoActual.setCliente(cliente);
         contratoActual.setServicio(servicio);
 
+        if(request.getContractStatus() == ContractStatus.SUS){
+            // Se tomará la fecha actual para el contrato sustitutorio
+            LocalDateTime fechaActual = LocalDateTime.now();
+            Date fechaActualDate = Date.from(fechaActual.atZone(ZoneId.systemDefault()).toInstant());
+
+            contratoSustitutorio.setFechaInicioContrato(fechaActualDate);
+            contratoSustitutorio.setFechaFinContrato(request.getFechaFinContrato());
+            contratoSustitutorio.setContractStatus(ContractStatus.VIG);
+            contratoSustitutorio.setPaymentMethod(request.getPaymentMethod());
+            contratoSustitutorio.setCliente(cliente);
+            contratoSustitutorio.setServicio(servicio);
+        }
+
         try {
             contratoEditado = contratoRepository.save(contratoActual);
+            if(request.getContractStatus() == ContractStatus.SUS) {
+                contratoSustitutorio = contratoRepository.save(contratoSustitutorio);
+            }
         } catch(DataAccessException e) {
             return GenericResponse
                     .getResponse(500,

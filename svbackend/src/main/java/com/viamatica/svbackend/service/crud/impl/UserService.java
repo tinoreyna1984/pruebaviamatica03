@@ -8,7 +8,6 @@ import com.viamatica.svbackend.model.dto.request.UserRequest;
 import com.viamatica.svbackend.model.dto.response.GenericResponse;
 import com.viamatica.svbackend.model.entity.Caja;
 import com.viamatica.svbackend.model.entity.User;
-import com.viamatica.svbackend.model.entity.UserCaja;
 import com.viamatica.svbackend.repository.CajaRepository;
 import com.viamatica.svbackend.repository.UserRepository;
 import com.viamatica.svbackend.service.crud.GenericService;
@@ -231,6 +230,23 @@ public class UserService implements GenericService<User, UserRequest> {
         }
     }
 
+    public GenericResponse<?> asignadoPor(String asignadoPor){
+        long asignados = 0L;
+        try {
+            asignados = userRepository.asignadoPor(asignadoPor);
+            return GenericResponse.getResponse(200, "Dashboard", asignados);
+        }catch(DataAccessException e) {
+            return GenericResponse
+                    .getResponse(500,
+                            "Error al obtener valores de asignacion: " + e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()),
+                            null);
+        } catch (Exception e){
+            return GenericResponse
+                    .getResponse(500,
+                            "Error inesperado: " + e.getMessage(),
+                            null);
+        }}
+
     public GenericResponse<?> approve(Long id){
         try {
             userRepository.approveUser(id);
@@ -295,6 +311,8 @@ public class UserService implements GenericService<User, UserRequest> {
                 user.setPassword(userRequest.getPassword());
                 user.setEmail(userRequest.getEmail());
                 user.setRole(userRequest.getRole());
+                user.setUserCreator(userRequest.getUserCreator());
+                user.setUserStatus(UserStatus.NOT_APPROVED);
                 userRepository.save(user);
             }
             return GenericResponse.getResponse(201, "Se creó usuarios desde CSV", archivo.getName());
@@ -322,6 +340,7 @@ public class UserService implements GenericService<User, UserRequest> {
         userRequest.setPassword(fila[1]);
         userRequest.setEmail(fila[2]);
         userRequest.setRole(Role.valueOf(fila[3]));
+        userRequest.setUserCreator((fila[4]));
         return userRequest;
     }
 

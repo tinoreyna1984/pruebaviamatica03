@@ -22,6 +22,19 @@
       />
     </div>
     <div class="mb-3">
+      <label for="contractStatus" class="form-label">Estado del contrato</label>
+      <select
+        id="contractStatus"
+        class="form-select"
+        formControlName="contractStatus"
+        required
+      >
+        <option selected value="VIG">Vigente</option>
+        <option value="SUS">Sustituido</option>
+        <option value="FIN">Finalizado</option>
+      </select>
+    </div>
+    <div class="mb-3">
       <label for="paymentMethod" class="form-label">Forma de pago</label>
       <select
         id="paymentMethod"
